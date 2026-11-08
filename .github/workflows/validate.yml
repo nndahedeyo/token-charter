@@ -1,0 +1,24 @@
+name: validate
+
+# 提案（プルリクエスト）ごとに、RULES.md の自動検査を行う
+on:
+  pull_request:
+    paths: ["data/**", "scripts/**", "site/**"]
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Check format, sources and change limits
+        run: python scripts/validate.py --base "origin/${{ github.base_ref }}"
+      - name: Check the site still builds
+        run: python scripts/build.py

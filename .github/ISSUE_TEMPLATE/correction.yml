@@ -1,0 +1,54 @@
+name: 訂正の提案 / Correction
+description: 点数や要約の誤りを、出典つきで知らせる / Report an error with a source
+title: "[訂正] "
+labels: ["correction"]
+body:
+  - type: input
+    id: token
+    attributes:
+      label: 銘柄 / Token
+      placeholder: "例 / e.g. HYPE"
+    validations:
+      required: true
+  - type: dropdown
+    id: item
+    attributes:
+      label: 項目 / Item
+      options:
+        - "1. 還元の約束"
+        - "2. 約束の実行"
+        - "3. 内部関係者の売却ルール"
+        - "4. 定期的な報告"
+        - "5. 罰則・担保"
+        - "6. 説明責任"
+        - "7. 供給予定の確定"
+        - "8. チェーン上の検証"
+        - "9. 少数による介入"
+        - "10. ルール変更の手続き"
+        - "要約の文章 / Summary text"
+    validations:
+      required: true
+  - type: textarea
+    id: what
+    attributes:
+      label: 何が違うか / What is wrong
+      description: いまの内容と、正しいと考える内容 / Current content and what you think is correct
+    validations:
+      required: true
+  - type: input
+    id: source
+    attributes:
+      label: 出典のURL / Source URL
+      description: 出典の優先順位はRULES.mdを参照 / See RULES.md for source priority
+      placeholder: "https://"
+    validations:
+      required: true
+  - type: dropdown
+    id: interest
+    attributes:
+      label: 利害の開示 / Disclosure
+      options:
+        - "この銘柄と利害関係はない / No interest in this token"
+        - "関係者または大口保有者である / I'm on the team or a large holder"
+    validations:
+      required: true

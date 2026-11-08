@@ -1,0 +1,73 @@
+name: Build and publish
+
+# 毎日1回と、main が更新されたときにページを作り直す。
+# 自動反映された提案は、遅くとも翌日の実行で公開される。
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: "17 3 * * *"   # 毎日 3:17 UTC（日本時間 12:17）
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Restore last metrics
+        run: |
+          git fetch origin snapshots:snapshots 2>/dev/null && git show snapshots:metrics.json > data/metrics.json || echo "no snapshot yet"
+
+      - name: Fetch revenue data (reference only, never changes scores)
+        run: python scripts/fetch_metrics.py || echo "fetch failed, keeping last values"
+
+      - name: Validate data
+        run: python scripts/validate.py
+
+      - name: Build site
+        run: python scripts/build.py
+
+      - name: Record snapshot (keeps history and keeps the repository active)
+        run: |
+          git config user.name "token-charter-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          cp data/metrics.json /tmp/metrics.json
+          if git ls-remote --exit-code --heads origin snapshots >/dev/null; then
+            git fetch origin snapshots && git switch snapshots
+          else
+            git switch --orphan snapshots && git rm -rf --quiet . || true
+          fi
+          cp /tmp/metrics.json metrics.json
+          mkdir -p history && cp /tmp/metrics.json "history/$(date -u +%Y-%m-%d).json"
+          git add metrics.json history
+          git commit -m "metrics $(date -u +%Y-%m-%d)" || echo "no change"
+          git push origin snapshots || echo "snapshot push failed"
+          git switch -
+
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

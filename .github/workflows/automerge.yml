@@ -1,0 +1,23 @@
+name: automerge
+
+# 提案が出たら「自動で反映」を予約する。実際に反映されるのは、
+# リポジトリのルール（検査に合格、提案者以外の2人が承認）を満たしたときだけ。
+# 提案のコードは実行しない（安全のため checkout しない）。
+on:
+  pull_request_target:
+    types: [opened, reopened, ready_for_review]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  enable:
+    if: github.event.pull_request.draft == false
+    runs-on: ubuntu-latest
+    steps:
+      - name: Enable auto-merge
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR: ${{ github.event.pull_request.html_url }}
+        run: gh pr merge "$PR" --auto --squash
