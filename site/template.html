@@ -193,7 +193,7 @@ footer{font-size:12px;color:var(--muted);border-top:1px solid var(--line);paddin
 <script>
 const T=__TOKENS__, I=__ITEMS__, REPO=__REPO__;
 const usd=v=>v==null?"—":"$"+(v>=1e6?(v/1e6).toFixed(1)+"M":v>=1e3?(v/1e3).toFixed(0)+"K":Math.round(v));
-function metLine(t){if(!t.met)return "";const p=[];if(t.met.revenue!=null)p.push("収益 "+usd(t.met.revenue));if(t.met.holders!=null)p.push("うち保有者へ "+usd(t.met.holders));return p.length?`<p class="src">直近30日（DefiLlama、${esc(t.metAt||"")}取得・参考値で点数には反映しない）：${p.join("、")}</p>`:""}
+function metLine(t){if(!t.met)return "";const p=[];if(t.met.revenue)p.push("収益 "+usd(t.met.revenue));if(t.met.holders)p.push("うち保有者へ "+usd(t.met.holders));return p.length?`<p class="src">直近30日（DefiLlamaの分類による、${esc(t.metAt||"")}取得・参考値で点数には反映しない）：${p.join("、")}</p>`:""}
 const GR="ABCDE", CATS=["すべて","基準","大型チェーン","DeFi・還元型","インフラ","小型見本"];
 let cat="すべて", key="t", dir=-1, open=null;
 const $=s=>document.querySelector(s);
