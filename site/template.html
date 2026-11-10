@@ -56,6 +56,9 @@ th button{all:unset;cursor:pointer}
 th button[data-dir]::after{content:attr(data-dir);margin-left:4px;color:var(--seal)}
 td.num{font-family:var(--f-mono);font-variant-numeric:tabular-nums;text-align:right}
 td.sym{font-family:var(--f-mono);font-weight:600}
+.symw{display:inline-flex;align-items:center;gap:8px}
+.ci{width:22px;height:22px;border-radius:50%;flex:none}
+.lang{color:var(--seal);font-weight:700}
 td.sym small{display:block;font-family:var(--f-body);font-weight:400;color:var(--muted);font-size:11px}
 tr.row{cursor:pointer}
 tr.row:hover td{background:var(--seal-soft)}
@@ -114,7 +117,7 @@ footer{font-size:12px;color:var(--muted);border-top:1px solid var(--line);paddin
       <div class="eyebrow">TOKEN CHARTER · みんなで検証する台帳</div>
       <h1>トークン憲章</h1>
       <p class="lead">暗号資産プロジェクトが<strong>約束を守っているか、守らせる仕組みがあるか</strong>を、同じ物差しで採点して公開します。株式市場で取引所や社債管理者が担っている「約束を守らせる役」を、公開データと、将来は担保と自動の罰則で代わりに担う試みです。</p>
-      <div class="meta"><span>採点時点：__ASOF__</span><span>対象：__COUNT__銘柄</span><span>10項目 × 0〜2点</span></div>
+      <div class="meta"><span>採点時点：__ASOF__</span><span>対象：__COUNT__銘柄</span><span>10項目 × 0〜2点</span><a class="lang" href="en/">English</a></div>
     </div>
     <div class="stamp" aria-hidden="true"><div>約束の<br>格付け<small>0–2 × 10</small></div></div>
   </header>
@@ -191,7 +194,7 @@ footer{font-size:12px;color:var(--muted);border-top:1px solid var(--line);paddin
 </div>
 
 <script>
-const T=__TOKENS__, I=__ITEMS__, REPO=__REPO__;
+const T=__TOKENS__, I=__ITEMS__, REPO=__REPO__, BASE=__BASE__;
 const usd=v=>v==null?"—":"$"+(v>=1e6?(v/1e6).toFixed(1)+"M":v>=1e3?(v/1e3).toFixed(0)+"K":Math.round(v));
 function metLine(t){if(!t.met)return "";const p=[];if(t.met.revenue)p.push("収益 "+usd(t.met.revenue));if(t.met.holders)p.push("うち保有者へ "+usd(t.met.holders));return p.length?`<p class="src">直近30日（DefiLlamaの分類による、${esc(t.metAt||"")}取得・参考値で点数には反映しない）：${p.join("、")}</p>`:""}
 const GR="ABCDE", CATS=["すべて","基準","大型チェーン","DeFi・還元型","インフラ","小型見本"];
@@ -219,7 +222,7 @@ function render(){
   $("#tb").innerHTML=xs.map(t=>{
     let h=`<tr class="row" tabindex="0" data-s="${t.s}" aria-expanded="${open===t.s}">
       <td><span class="grade g${t.g}">${t.g}</span></td>
-      <td class="sym">${t.s}<small>${esc(t.n)}</small></td>
+      <td class="sym"><span class="symw">${t.ic?`<img class="ci" src="${BASE}icons/${t.s}.png" alt="" width="22" height="22" loading="lazy" onerror="this.remove()">`:""}<span>${t.s}<small>${esc(t.n)}</small></span></span></td>
       <td class="num"><b>${t.t}</b></td>
       <td><span class="dots">${dots(t.v)}</span></td>
       <td class="num">${bar(t.a)}</td><td class="num">${bar(t.m)}</td>
@@ -237,5 +240,5 @@ $("#crit").innerHTML=I.map(i=>`<article><header><h3>${esc(i.name)}</h3><span><sp
   <div class="eq">株式での対応：${esc(i.eq)}</div></article>`).join("");
 {const n=T.filter(x=>x.v[4]===2).length;document.getElementById("gap-note").textContent=n===0?`担保つきの約束をしている銘柄は、${T.length}銘柄のうち一つもありません（項目5で2点の銘柄はゼロ）。ここがトークン憲章の埋めたい空白です。`:`担保つきの約束をしている銘柄は、${T.length}銘柄のうち${n}銘柄です（項目5で2点）。`}
 render();
-if(REPO){document.getElementById("repo-links").innerHTML=` <a href="${REPO}/blob/main/RULES.md" target="_blank" rel="noopener">編集ルール</a> · <a href="${REPO}" target="_blank" rel="noopener">GitHub</a> · <a href="data/tokens.json" target="_blank" rel="noopener">生データ</a>`}
+if(REPO){document.getElementById("repo-links").innerHTML=` <a href="${REPO}/blob/main/RULES.md" target="_blank" rel="noopener">編集ルール</a> · <a href="${REPO}" target="_blank" rel="noopener">GitHub</a> · <a href="${BASE}data/tokens.json" target="_blank" rel="noopener">生データ</a>`}
 </script>

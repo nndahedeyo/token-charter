@@ -15,7 +15,12 @@
       "score2": "明文化され、コードで自動実行",
       "score1": "明文化されているが、運営が実行",
       "score0": "還元の約束がない",
-      "equity_analogue": "配当方針・自社株買い決議"
+      "equity_analogue": "配当方針・自社株買い決議",
+      "name_en": "Holder-return commitment",
+      "score2_en": "Written down and executed automatically in code",
+      "score1_en": "Written down but carried out by the team",
+      "score0_en": "No commitment to return value to holders",
+      "equity_analogue_en": "Dividend policy, buyback resolutions"
     },
     {
       "no": 2,
@@ -24,7 +29,12 @@
       "score2": "約束どおり実行。削減・停止・先送りなし",
       "score1": "一部の変更や遅れがある",
       "score0": "大幅な削減・停止・先送り",
-      "equity_analogue": "業績予想の達成"
+      "equity_analogue": "業績予想の達成",
+      "name_en": "Delivery on commitments",
+      "score2_en": "Delivered as promised, with no cuts, pauses or delays",
+      "score1_en": "Some changes or delays",
+      "score0_en": "Major cuts, pauses or postponements",
+      "equity_analogue_en": "Meeting guidance"
     },
     {
       "no": 3,
@@ -33,7 +43,12 @@
       "score2": "内部の保有がない、または売却ルールを公開",
       "score1": "解除予定は公開だが売却ルールはない",
       "score0": "大量の内部保有があり、ルールも予定もない",
-      "equity_analogue": "ロックアップ・10b5-1プラン"
+      "equity_analogue": "ロックアップ・10b5-1プラン",
+      "name_en": "Insider selling rules",
+      "score2_en": "No insider holdings, or published selling rules",
+      "score1_en": "Unlock schedule published, but no selling rules",
+      "score0_en": "Large insider holdings with no rules or schedule",
+      "equity_analogue_en": "IPO lock-ups, 10b5-1 plans"
     },
     {
       "no": 4,
@@ -42,7 +57,12 @@
       "score2": "定期報告とダッシュボードがそろう",
       "score1": "不定期、または一部だけ",
       "score0": "報告がほぼない",
-      "equity_analogue": "四半期報告・適時開示"
+      "equity_analogue": "四半期報告・適時開示",
+      "name_en": "Regular reporting",
+      "score2_en": "Regular reports plus a live dashboard",
+      "score1_en": "Irregular or partial",
+      "score0_en": "Almost none",
+      "equity_analogue_en": "Quarterly reports, timely disclosure"
     },
     {
       "no": 5,
@@ -51,7 +71,12 @@
       "score2": "約束に担保があり、破れば保有者に渡る",
       "score1": "コードで自動執行され、人の判断で止めにくい",
       "score0": "人の判断次第",
-      "equity_analogue": "社債の財務制限条項・クローバック"
+      "equity_analogue": "社債の財務制限条項・クローバック",
+      "name_en": "Penalties and collateral",
+      "score2_en": "Promises are backed by collateral that goes to holders if broken",
+      "score1_en": "Enforced automatically in code and hard to stop",
+      "score0_en": "Depends on human judgment",
+      "equity_analogue_en": "Bond covenants, clawbacks"
     },
     {
       "no": 6,
@@ -60,7 +85,12 @@
       "score2": "変更や未達の理由を、根拠つきで公開",
       "score1": "説明はあるが不十分",
       "score0": "説明がない",
-      "equity_analogue": "comply or explain"
+      "equity_analogue": "comply or explain",
+      "name_en": "Accountability",
+      "score2_en": "Reasons for changes and misses are published with evidence",
+      "score1_en": "Some explanation, but not enough",
+      "score0_en": "No explanation",
+      "equity_analogue_en": "Comply or explain"
     },
     {
       "no": 7,
@@ -69,7 +99,12 @@
       "score2": "上限や発行ルールが確定し、公開",
       "score1": "予定はあるが、裁量の部分が大きい",
       "score0": "予定のない大量の保有分がある",
-      "equity_analogue": "希薄化の開示"
+      "equity_analogue": "希薄化の開示",
+      "name_en": "Fixed supply schedule",
+      "score2_en": "Cap or issuance rules are fixed and published",
+      "score1_en": "A schedule exists, but with wide discretion",
+      "score0_en": "Large holdings with no schedule",
+      "equity_analogue_en": "Dilution disclosure"
     },
     {
       "no": 8,
@@ -78,7 +113,12 @@
       "score2": "供給・還元・解除をチェーン上で確認できる",
       "score1": "一部は運営の発表に頼る",
       "score0": "ほぼ確認できない",
-      "equity_analogue": "会計監査"
+      "equity_analogue": "会計監査",
+      "name_en": "On-chain verifiability",
+      "score2_en": "Supply, returns and unlocks can be checked on-chain",
+      "score1_en": "Partly relies on team announcements",
+      "score0_en": "Hardly verifiable",
+      "equity_analogue_en": "Financial audits"
     },
     {
       "no": 9,
@@ -87,7 +127,12 @@
       "score2": "少数が止めたり変えたりできない",
       "score1": "停止や凍結の権限が限定的にある",
       "score0": "少数が市場やチェーンを止められる、または止めた前例がある",
-      "equity_analogue": "支配株主の問題"
+      "equity_analogue": "支配株主の問題",
+      "name_en": "Intervention by a few",
+      "score2_en": "No small group can halt or change things",
+      "score1_en": "Limited pause or freeze powers exist",
+      "score0_en": "A small group can halt markets or the chain, or has done so",
+      "equity_analogue_en": "Controlling-shareholder issues"
     },
     {
       "no": 10,
@@ -96,7 +141,12 @@
       "score2": "投票と猶予期間があり、変更が難しい",
       "score1": "手続きはあるが、運営の影響が大きい",
       "score0": "運営が自由に変えられる",
-      "equity_analogue": "定款変更の手続き"
+      "equity_analogue": "定款変更の手続き",
+      "name_en": "Rule-change process",
+      "score2_en": "Votes and waiting periods make changes hard",
+      "score1_en": "A process exists, but the team has strong influence",
+      "score0_en": "The team can change rules freely",
+      "equity_analogue_en": "Charter amendment rules"
     }
   ]
 }

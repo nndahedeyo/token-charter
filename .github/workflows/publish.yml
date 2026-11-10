@@ -34,8 +34,14 @@ jobs:
       - name: Fetch revenue data (reference only, never changes scores)
         run: python scripts/fetch_metrics.py || echo "fetch failed, keeping last values"
 
+      - name: Fetch coin icons (display only)
+        run: python scripts/fetch_icons.py || echo "icons skipped"
+
       - name: Validate data
         run: python scripts/validate.py
+
+      - name: Refresh English template from the Japanese one
+        run: python scripts/make_en_template.py || echo "keeping the committed English template"
 
       - name: Build site
         run: python scripts/build.py

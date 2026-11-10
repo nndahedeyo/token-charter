@@ -1,6 +1,6 @@
 # トークン憲章
 
-[English](README.en.md)
+[English](README.en.md) · 公開ページ：[日本語](https://nndahedeyo.github.io/token-charter/) / [English](https://nndahedeyo.github.io/token-charter/en/)
 
 暗号資産プロジェクトが**約束を守っているか、守らせる仕組みがあるか**を、10の項目で採点して公開する台帳です。Wikipediaのように、誰でも出典つきで修正を提案でき、決まったルールを満たした変更だけが自動で反映されます。
 

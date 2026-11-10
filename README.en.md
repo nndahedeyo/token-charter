@@ -1,6 +1,6 @@
 # Token Charter
 
-[日本語](README.md)
+[日本語](README.md) · Live site: [English](https://nndahedeyo.github.io/token-charter/en/) / [日本語](https://nndahedeyo.github.io/token-charter/)
 
 A public ledger that scores whether crypto projects **keep their promises, and whether anything makes them keep them**, across 10 items. Like Wikipedia, anyone can propose a sourced correction, and only changes that meet fixed rules go live, automatically.
 
@@ -17,7 +17,7 @@ Token Charter measures promises and their delivery with one yardstick, and publi
 | Issuer (6) | 1. Holder-return commitment 2. Delivery on commitments 3. Insider selling rules 4. Regular reporting 5. Penalties and collateral 6. Accountability |
 | Mechanism (4) | 7. Fixed supply schedule 8. On-chain verifiability 9. Intervention by a few 10. Rule-change process |
 
-Each item scores 0–2, converted to a 100-point scale. Tokens with no issuer (such as BTC) are scored on the 4 mechanism items only. Full criteria are in [data/criteria.json](data/criteria.json) (written in Japanese for now).
+Each item scores 0–2, converted to a 100-point scale. Tokens with no issuer (such as BTC) are scored on the 4 mechanism items only. Full criteria, in Japanese and English, are in [data/criteria.json](data/criteria.json).
 
 **Scores are not investment advice.** They measure the reliability of promises, not price or prospects.
 
