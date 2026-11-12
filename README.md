@@ -50,3 +50,5 @@
 
 - データと文章（`data/`、`*.md`）：[CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/deed.ja)（Wikipediaと同じ。出典を示せば、誰でも再利用・改変できます）
 - プログラム（`scripts/`、`site/`、`.github/`）：MIT
+
+<!-- test -->
