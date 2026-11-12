@@ -16,17 +16,22 @@ GitHubで公開リポジトリ（例：`token-charter`）を作り、このフ�
 
 ## 4. 反映のルールを設定する
 
-「Settings」→「Rules」→「Rulesets」→「New branch ruleset」で、対象を `main` にして次を有効にします。
+「Settings」→「Rules」→「Rulesets」→「New branch ruleset」で、対象を `main` にして次を有効にします。「Bypass list」には誰も入れません。
 
 | 設定 | 値 |
 | --- | --- |
-| Require a pull request before merging | オン |
-| Required approvals | **2** |
-| Dismiss stale pull request approvals when new commits are pushed | オン |
-| Require status checks to pass | オン、`validate` と `rules-guard` を追加 |
+| Require a pull request before merging | オン。**Required approvals は 0**（承認は下の `approvals` で数えるため） |
+| Require status checks to pass | オン。`validate` と `approvals` を追加 |
 | Block force pushes | オン |
+| Restrict deletions | オン |
 
-これで、RULES.mdの「検査と2人の承認がそろったら反映」と「ルールの変更は4人の承認」が、GitHubの仕組みとして強制されます。
+GitHubの「Required approvals」は、書き込み権限を持つ人の承認しか数えません。そのため使わず、承認は `approvals` の検査が [APPROVERS.md](APPROVERS.md) の条件で数えます。
+
+## 4b. 提案側の自動処理を動かさない設定
+
+「Settings」→「Actions」→「General」→「Approval for running fork pull request workflows from contributors」で、**Require approval for all external contributors** を選びます。
+
+提案に自動処理のファイルを紛れ込ませて、検査に合格したふりをさせる手口を防ぎます。トークン憲章の検査はすべて main の版で動くので、この設定にしても検査は止まりません。外部の人の提案で「Approve and run」のボタンが出ても、**押さないでください**。
 
 ## 5. 動作を確かめる
 
@@ -39,7 +44,7 @@ GitHubで公開リポジトリ（例：`token-charter`）を作り、このフ�
 
 ## 引き継ぎ
 
-運営者がいなくなっても続くように、協力者のうち信頼できる2〜3人に、リポジトリの管理権限（Maintain）を渡しておくことを勧めます。
+承認できる人は実績で自動的に増えるので、運営者がいなくなっても提案は反映され続けます。GitHubの設定が止まったとき（定期実行の停止など）に備えて、長く協力している人に管理権限（Maintain）を渡すかどうかは、ルールの変更と同じく4人の承認で決めることを勧めます。
 
 ---
 
@@ -50,7 +55,8 @@ After this one-time setup (about 15 minutes), the project runs without anyone te
 1. Create a public repository and upload everything in this folder, including `.github`
 2. Settings → Pages → Source: **GitHub Actions**
 3. Settings → General → Pull Requests: check **Allow auto-merge**
-4. Settings → Rules → Rulesets → New branch ruleset for `main`: require a pull request, **2** approvals, dismiss stale approvals, require the `validate` and `rules-guard` status checks, block force pushes
+4. Settings → Rules → Rulesets → New branch ruleset for `main`, with an empty bypass list: require a pull request with **0** required approvals (GitHub only counts approvals from people with write access, so the `approvals` check counts them instead, per APPROVERS.md), require the `validate` and `approvals` status checks, block force pushes, restrict deletions
+4b. Settings → Actions → General → fork pull request workflows: **Require approval for all external contributors**. This stops a proposal from smuggling in its own workflow to fake a passing check. All of Token Charter's checks run from main, so they keep working. Never click "Approve and run" on an outside proposal
 5. Actions → "Build and publish" → Run workflow once to confirm the site opens. After that it runs whenever main changes and once a day; auto-merged proposals go live by the next day
 
-GitHub may pause scheduled workflows in public repositories after 60 days without activity. The daily job records revenue data to the `snapshots` branch to keep the repository active. If it still pauses, re-enable it from Actions. Give 2–3 trusted contributors the Maintain role so the project outlives any one person.
+GitHub may pause scheduled workflows in public repositories after 60 days without activity. The daily job records revenue data to the `snapshots` branch to keep the repository active. If it still pauses, re-enable it from Actions. Approvers grow automatically from track record, so proposals keep merging even if the owner disappears.

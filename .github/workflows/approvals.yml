@@ -1,0 +1,36 @@
+name: approvals
+
+# 承認を数えて、結果を「approvals」として提案に付ける（RULES.md「承認」）。
+# 提案が出たとき・更新されたときと、20分ごとに全部の提案を数え直す（承認や反対、14日の経過を反映するため）。
+# 動くのは常に main の版。提案のコードは取り込まない。
+on:
+  pull_request_target:
+    types: [opened, synchronize, reopened, ready_for_review]
+  schedule:
+    - cron: "*/20 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pull-requests: read
+  statuses: write
+
+concurrency:
+  group: approvals-${{ github.event.pull_request.number || 'all' }}
+
+jobs:
+  count:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Count approvals
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: python -E -s scripts/approvals.py

@@ -1,6 +1,7 @@
 """data/ から公開ページを作る。日本語版を _site/index.html、英語版を _site/en/index.html に置く。"""
 import json
 import os
+import re
 import shutil
 from urllib.parse import urlparse
 
@@ -8,6 +9,13 @@ from common import CATEGORIES, ROOT, grade, load, pct
 
 CATEGORIES_EN = {"baseline": "Baseline", "l1": "Layer 1", "defi": "DeFi", "infra": "Infrastructure", "small": "Small"}
 CONF = {"ja": {"high": "高", "medium": "中", "low": "低"}, "en": {"high": "High", "medium": "Medium", "low": "Low"}}
+
+
+def js(value):
+    """<script> の中に埋め込むJSON。「</script>」などで抜け出せないように < > & をエスケープする。"""
+    return (json.dumps(value, ensure_ascii=False)
+            .replace("<", "\\u003c").replace(">", "\\u003e").replace("&", "\\u0026")
+            .replace("\u2028", "\\u2028").replace("\u2029", "\\u2029"))
 
 
 def tokens_for(lang, data, crit, metrics, icons):
@@ -64,13 +72,17 @@ def main():
     shutil.rmtree(out, ignore_errors=True)
     for lang, tpl, dest, base in (("ja", "template.html", out, ""), ("en", "template.en.html", out / "en", "../")):
         html = (ROOT / "site" / tpl).read_text(encoding="utf-8")
-        html = (html.replace("__TOKENS__", json.dumps(tokens_for(lang, data, crit, metrics, icons), ensure_ascii=False))
-                    .replace("__ITEMS__", json.dumps(items_for(lang, crit), ensure_ascii=False))
-                    .replace("__REPO__", json.dumps(repo_url))
-                    .replace("__BASE__", json.dumps(base))
-                    .replace("__ASOF__", data["as_of"])
-                    .replace("__COUNT__", str(len(data["tokens"])))
-                    .replace("__GRADES__", grades_text(lang, crit["grades"])))
+        values = {
+            "__TOKENS__": js(tokens_for(lang, data, crit, metrics, icons)),
+            "__ITEMS__": js(items_for(lang, crit)),
+            "__REPO__": js(repo_url),
+            "__BASE__": js(base),
+            "__ASOF__": data["as_of"],
+            "__COUNT__": str(len(data["tokens"])),
+            "__GRADES__": grades_text(lang, crit["grades"]),
+        }
+        # 1回の置き換えで全部を埋める（データの中に「__BASE__」などの文字があっても、二重に置き換えない）
+        html = re.sub("|".join(map(re.escape, values)), lambda m: values[m.group(0)], html)
         dest.mkdir(parents=True, exist_ok=True)
         (dest / "index.html").write_text(html, encoding="utf-8")
     shutil.copytree(ROOT / "data", out / "data")  # 生データも公開して、誰でも検証できるようにする

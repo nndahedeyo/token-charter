@@ -25,10 +25,25 @@ Changes based only on social media posts or anonymous blogs are not accepted.
 
 1. **Propose**: open a pull request on GitHub. See [CONTRIBUTING.md](CONTRIBUTING.md)
 2. **Automatic checks**: scores are 0–2, every change has a source link, the format is valid
-3. **Approval**: **2** contributors other than the proposer approve. Approvals from people who disclosed an interest don't count
-4. **Automatic merge**: once checks and approvals pass, the change merges and the site rebuilds
+3. **Approval**: approvers review on GitHub with "Approve" or "Request changes" (see "Approval" below)
+4. **Automatic merge**: once checks and approvals pass, the change merges, and the site rebuilds by the next day
 
 There is no final review by an operator.
+
+## Approval
+
+**Who can approve** is decided automatically by [APPROVERS.md](APPROVERS.md), not by anyone's appointment: people with **3 or more merged proposals** here whose GitHub account is at least **90 days** old, plus the founding approvers listed there.
+
+These don't count: the proposer and anyone who added commits to the proposal; people listed under "Removed"; approvals given to an earlier version of the proposal (any new commit resets approvals). Team members and large holders of a rated project must neither approve nor object (principle 4). A machine can't detect this, so people who break it get listed under "Removed".
+
+| Kind of change | Merges when |
+| --- | --- |
+| Normal (scores, summaries, sources, adding a token) | approvals exceed objections by **2 or more**, or one approval stands for **14 days** with no objection from an approver |
+| Rules and system (see "Changing these rules") | approvals exceed objections by **4 or more**. The 14-day path doesn't apply |
+
+An objection stands until its author approves or dismisses it. Approvals and objections from non-approvers are ignored, so throwaway accounts can neither push nor block a change. The 14-day path exists so proposals don't stall while there are few approvers; a single objection turns it off.
+
+**As an approver**: open the sources and check the proposal says only what they say (principles 1 and 3), then Approve or Request changes with your reason. Watch the repository for pull requests so you see new ones.
 
 ## When people disagree
 
@@ -43,4 +58,10 @@ There is no final review by an operator.
 
 ## Changing these rules
 
-Changes to these rules, the criteria (`data/criteria.json`) or the automation (`scripts/`, `.github/`) follow the same process but need **4** approvals, also checked automatically.
+Changes to these rules, the approver list (`APPROVERS.md`), the criteria (`data/criteria.json`), the page (`site/`), the automation (`scripts/`, `.github/`), `CONTRIBUTING.md` or the license follow the same process, but approvals must exceed objections by **4 or more**, checked automatically. Removing or renaming a token is treated the same way.
+
+## Limits of this system
+
+- **The repository owner can change GitHub's settings**, and could bypass these rules by doing so. Any such change still leaves a public record on GitHub
+- **At first there are few approvers, so the founding approvers carry more weight.** That weight shrinks as approvers grow
+- **A machine can't detect hidden interests.** If you find one, propose adding that person to "Removed", with sources

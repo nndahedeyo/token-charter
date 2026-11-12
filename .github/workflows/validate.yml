@@ -1,24 +1,52 @@
 name: validate
 
-# 提案（プルリクエスト）ごとに、RULES.md の自動検査を行う
+# 提案（プルリクエスト）ごとに、RULES.md の自動検査を行い、結果を「validate」として提案に付ける。
+# pull_request_target なので、動くのは常に main の検査コード。提案のコードは実行せず、
+# 提案の data/ と site/ だけを読み込んで調べる（提案で検査そのものを書き換えて通すことはできない）。
 on:
-  pull_request:
-    paths: ["data/**", "scripts/**", "site/**"]
+  pull_request_target:
+    types: [opened, synchronize, reopened, ready_for_review]
 
 permissions:
   contents: read
+  statuses: write
+
+concurrency:
+  group: validate-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
 
 jobs:
-  validate:
+  check:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
+          ref: ${{ github.event.pull_request.base.sha }}
           fetch-depth: 0
+          persist-credentials: false
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+      - name: Bring in the proposal's data only
+        env:
+          N: ${{ github.event.pull_request.number }}
+          REPO_URL: https://github.com/${{ github.repository }}
+        run: |
+          git fetch -q "$REPO_URL" "refs/pull/$N/head"
+          rm -rf data site
+          git checkout FETCH_HEAD -- data site 2>/dev/null || git checkout FETCH_HEAD -- data
       - name: Check format, sources and change limits
-        run: python scripts/validate.py --base "origin/${{ github.base_ref }}"
-      - name: Check the site still builds
-        run: python scripts/build.py
+        id: v
+        run: |
+          python -E -s scripts/validate.py --base HEAD 2>&1 | tee out.txt
+          python -E -s scripts/build.py
+      - name: Report
+        if: always()
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SHA: ${{ github.event.pull_request.head.sha }}
+          OK: ${{ steps.v.outcome == 'success' }}
+          URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          if [ "$OK" = "true" ]; then s=success; d="自動検査に合格"; else s=failure; d="自動検査で問題あり（詳細をクリック）"; fi
+          gh api "repos/$GITHUB_REPOSITORY/statuses/$SHA" -f state=$s -f context=validate -f description="$d" -f target_url="$URL" >/dev/null

@@ -11,6 +11,8 @@
 3. 「Propose changes」で提案を出し、テンプレートに沿って、何をなぜ変えたかを書く
 4. 採点されるプロジェクトと利害がある場合は、そのことを書く
 
+提案は、承認できる人の承認がそろうと自動で反映されます（[RULES.md](RULES.md)「承認」）。反映された提案が3件になると、あなたも承認できる人になります（[APPROVERS.md](APPROVERS.md)）。
+
 コードが分からなくても、「訂正の提案」（Issue）から出典を添えて知らせるだけでも構いません。誰かが提案の形にします。
 
 ## 銘柄を追加する
@@ -23,5 +25,7 @@
 2. Change `scores` (0, 1 or 2; items 1–6 are `null` for tokens with no issuer), `note` (summarize sources only), `sources` (**add at least one** source for your change) and `reviewed` (the date you checked)
 3. Click "Propose changes" and fill in the template: what you changed and why
 4. Disclose any interest in the rated project
+
+Proposals merge automatically once approvers approve ([RULES.en.md](RULES.en.md)). After 3 merged proposals, you become an approver too ([APPROVERS.md](APPROVERS.md)).
 
 If you don't write code, open a "Correction" Issue with your source. Someone will turn it into a proposal.

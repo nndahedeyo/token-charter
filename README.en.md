@@ -27,7 +27,7 @@ The [editing rules (RULES.en.md)](RULES.en.md) do, not an operator.
 
 1. Anyone can propose a correction with a source
 2. Automatic checks verify format and sources
-3. Two contributors other than the proposer approve, and the change merges automatically
+3. Approvers (decided automatically by track record) approve, and the change merges automatically ([RULES.en.md](RULES.en.md))
 4. Revenue data is pulled daily for reference. Scores never change automatically
 
 ## Take part

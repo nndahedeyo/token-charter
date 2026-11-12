@@ -29,6 +29,8 @@ def check_format(data, crit):
         err("as_of は YYYY-MM-DD の形式にしてください")
     for t in data.get("tokens", []):
         sym = t.get("symbol", "?")
+        if not re.match(r"^[A-Z0-9]{1,12}$", str(sym)):
+            err(f"{sym}: symbol は英大文字と数字だけ、12文字以内にしてください")
         if sym in seen:
             err(f"{sym}: 同じ銘柄が2回あります")
         seen.add(sym)
@@ -58,8 +60,13 @@ def check_format(data, crit):
             err(f"{sym}: confidence は high、medium、low のどれかにしてください")
         if not re.match(r"^\d{4}-\d{2}-\d{2}$", str(t.get("reviewed", ""))):
             err(f"{sym}: reviewed は YYYY-MM-DD の形式にしてください")
+        for k in ("coingecko", "defillama"):
+            if t.get(k) is not None and not re.match(r"^[a-z0-9][a-z0-9.-]{0,80}$", str(t[k])):
+                err(f"{sym}: {k} は英小文字・数字・ハイフン・ドットだけにしてください")
         if len(t.get("note", "")) > 300:
             err(f"{sym}: note は300文字以内にしてください")
+        if len(t.get("note_en", "")) > 600:
+            err(f"{sym}: note_en は600文字以内にしてください")
 
 
 def git(*args):
