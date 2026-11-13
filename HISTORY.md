@@ -13,4 +13,4 @@ During launch there were no approvers yet, so the owner set up the system direct
 | 2026-11-09 | 収益データが0のときは表示しない、DefiLlamaの分類であることを明記（40ab547） | 誤解を招く表示の修正 / Fix a misleading display |
 | 2026-11-10 | 英語版ページとコインのアイコンを追加、HYPEの要約を更新（8d2935d） | 立ち上げの準備 / Launch preparation |
 | 2026-11-12 | 承認できる人を実績で自動的に決める仕組みに変更、検査を提案側から書き換えられないように（1a32482） | GitHubの承認設定では、持ち主しか承認できず、提案が反映されなかったため / GitHub's approval setting only counted the owner, so nothing could merge |
-| 2026-11-13 | AIエージェントの決まり、自動の見張り役、この記録を追加（e5aa8e9）| 承認できる人が4人そろう前に、AIで承認者を水増しする手口を防ぐため / To block AI-driven approver inflation before 4 approvers exist |
+| 2026-11-13 | AIエージェントの決まり、自動の見張り役、この記録を追加（e5aa8e9 と、その日の後続の修正）| 承認できる人が4人そろう前に、AIで承認者を水増しする手口を防ぐため / To block AI-driven approver inflation before 4 approvers exist |

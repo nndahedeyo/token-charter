@@ -76,9 +76,10 @@ def findings(today, history_dir, check_links=True):
             for s in t["sources"]:
                 why = dead(s["url"])
                 if why:
-                    out.append((f"[自動検知] {t['symbol']}：出典が開けません",
+                    out.append((f"[自動検知] {t['symbol']}：出典「{s['title']}」が開けません",
                                 f"出典「{s['title']}」（{s['url']}）が開けません（{why}）。\n\n"
-                                "移転先か、代わりになる出典を探して提案してください。点数は自動では変わりません。"))
+                                "移転先か、代わりになる出典を探して提案してください。点数は自動では変わりません。\n\n"
+                                "ボット除けで誤って検知することもあります。ブラウザで開けた場合は、このIssueを閉じてください。"))
     return out
 
 
