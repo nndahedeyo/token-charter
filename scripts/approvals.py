@@ -24,7 +24,7 @@ QUIET_DAYS = 14          # 承認1人のまま反対がなければ反映する�
 
 # ここに触れる変更は「ルール・仕組みの変更」として4人の承認が要る
 PROTECTED = re.compile(
-    r"^(RULES(\.en)?\.md|CONTRIBUTING(\.en)?\.md|APPROVERS\.md|LICENSE|data/criteria\.json|scripts/|site/|\.github/)")
+    r"^(RULES(\.en)?\.md|CONTRIBUTING(\.en)?\.md|APPROVERS\.md|HISTORY\.md|LICENSE|data/criteria\.json|scripts/|site/|\.github/)")
 
 
 def parse_approvers(text):
@@ -128,7 +128,7 @@ class GitHub:
                 u = self.req(f"/users/{urllib.parse.quote(login)}")
                 age = now - dt.datetime.fromisoformat(u["created_at"].replace("Z", "+00:00"))
                 if age >= dt.timedelta(days=MIN_ACCOUNT_DAYS) and u.get("type") == "User":
-                    q = urllib.parse.quote(f"repo:{self.repo} is:pr is:merged author:{login}")
+                    q = urllib.parse.quote(f"repo:{self.repo} is:pr is:merged author:{login} -label:ai-proposal")
                     ok = self.req(f"/search/issues?q={q}&per_page=1")["total_count"] >= MERIT
             self.cache[login] = ok
             return ok

@@ -11,6 +11,7 @@ on:
 
 permissions:
   contents: write
+  issues: write
   pages: write
   id-token: write
 
@@ -62,6 +63,14 @@ jobs:
           git commit -m "metrics $(date -u +%Y-%m-%d)" || echo "no change"
           git push origin snapshots || echo "snapshot push failed"
           git switch -
+
+      - name: Watch for changes and open issues (never changes scores)
+        if: github.event_name != 'push'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          mkdir -p /tmp/snap && git archive snapshots history | tar -x -C /tmp/snap || true
+          HISTORY_DIR=/tmp/snap/history python scripts/watch.py || echo "watch skipped"
 
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3

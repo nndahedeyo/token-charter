@@ -1,11 +1,12 @@
 name: automerge
 
 # 提案が出たら「自動で反映」を予約する。実際に反映されるのは、
-# リポジトリのルール（検査に合格、提案者以外の2人が承認）を満たしたときだけ。
+# 検査（validate）と承認（approvals）の両方に合格したときだけ（RULES.md）。
+# あわせて、AIエージェントが作った提案に「ai-proposal」の目印を付ける。
 # 提案のコードは実行しない（安全のため checkout しない）。
 on:
   pull_request_target:
-    types: [opened, reopened, ready_for_review]
+    types: [opened, reopened, ready_for_review, edited]
 
 permissions:
   contents: write
@@ -16,7 +17,18 @@ jobs:
     if: github.event.pull_request.draft == false
     runs-on: ubuntu-latest
     steps:
+      - name: Mark proposals made by an AI agent
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR: ${{ github.event.pull_request.html_url }}
+          BODY: ${{ github.event.pull_request.body }}
+        run: |
+          if printf '%s' "$BODY" | grep -Eiq -- '- \[x\] (AIエージェントが作成|An AI agent)'; then
+            gh label create ai-proposal --color B5602A --description "AIエージェントが作った提案（承認できる人の実績には数えない）" 2>/dev/null || true
+            gh pr edit "$PR" --add-label ai-proposal
+          fi
       - name: Enable auto-merge
+        if: github.event.action != 'edited'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PR: ${{ github.event.pull_request.html_url }}

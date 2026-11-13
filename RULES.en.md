@@ -60,8 +60,17 @@ An objection stands until its author approves or dismisses it. Approvals and obj
 
 Changes to these rules, the approver list (`APPROVERS.md`), the criteria (`data/criteria.json`), the page (`site/`), the automation (`scripts/`, `.github/`), `CONTRIBUTING.md` or the license follow the same process, but approvals must exceed objections by **4 or more**, checked automatically. Removing or renaming a token is treated the same way.
 
+## AI and the automatic watcher
+
+- **AI agents may propose.** If an AI agent wrote and submitted a proposal, tick "AI use" in the proposal. It then gets the `ai-proposal` label automatically and doesn't count toward the 3 merged proposals needed to become an approver
+- **Only humans approve or object.** Anyone who has an AI approve or object, or approves from an AI-run account, gets listed under "Removed". This stops one person from minting approvers by running many agents
+- **A watcher flags changes automatically.** Every day it opens issues (label `watch`) for tokens whose last-30-day revenue fell to half or less of the 30 days before (with the median across all tokens, to show whether it's market-wide), and for sources that no longer open. It never changes scores or judges anything
+
 ## Limits of this system
 
 - **The repository owner can change GitHub's settings**, and could bypass these rules by doing so. Any such change still leaves a public record on GitHub
 - **At first there are few approvers, so the founding approvers carry more weight.** That weight shrinks as approvers grow
 - **A machine can't detect hidden interests.** If you find one, propose adding that person to "Removed", with sources
+- **A machine can't tell an AI-run account from a human.** Report it the same way
+- **Approvals can take a few hours to be counted**, because recounting relies on GitHub's scheduled runs, which get delayed when busy
+- **Every change the owner made outside these rules is recorded in [HISTORY.md](HISTORY.md)**
