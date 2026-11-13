@@ -5,7 +5,7 @@
 1. 収益の大きな減少：直近30日の収益が、30日前の30日間より半分以下になった銘柄。
    市場全体の動きか、その銘柄だけの動きかを分けるため、全銘柄の中央値も書く
 2. 開けなくなった出典：ページが消えた（404・410）か、サイトが見つからない出典
-同じ題名のIssueが開いていれば、新しく立てない。
+同じ題名のIssueがあれば（閉じたものも含めて）、新しく立てない。
 """
 import json
 import os
@@ -98,7 +98,8 @@ def main():
         return
     subprocess.run(["gh", "label", "create", LABEL, "--color", "7FCBCB",
                     "--description", "見張り役が自動で見つけた変化（点数は自動では変わりません）"], capture_output=True)
-    listed = json.loads(gh("issue", "list", "--state", "open", "--label", LABEL, "--limit", "200", "--json", "title"))
+    # 閉じたIssueも含めて同じ題名なら立てない（誤検知として閉じたものを、毎日立て直さないため）
+    listed = json.loads(gh("issue", "list", "--state", "all", "--label", LABEL, "--limit", "1000", "--json", "title"))
     open_titles = {i["title"] for i in listed}
     made = 0
     for title, body in items:
