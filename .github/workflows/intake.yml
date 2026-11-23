@@ -1,0 +1,34 @@
+name: intake
+
+# GitHub なしの窓口：Nostr に届いた「評価の希望」と「訂正」を、1日1回、課題（Issue、目印「from-nostr」）にする（RULES.md）。
+# 点数は変えない。届いた文はデータとして扱い、実行しない。動くのは常に main の版。
+on:
+  schedule:
+    - cron: "41 2 * * *"   # 毎日 2:41 UTC（日本時間 11:41）。公開（3:17）の前に課題をそろえる
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+concurrency:
+  group: intake
+
+jobs:
+  intake:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install websockets==13.1
+      - name: Check the intake rules
+        run: python -E tests/test_intake.py
+      - name: Turn requests and corrections into issues (never changes scores)
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+        run: python -E scripts/intake.py

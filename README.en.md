@@ -33,6 +33,7 @@ The [editing rules (RULES.en.md)](RULES.en.md) do, not an operator.
 ## Take part
 
 - Found an error? [Open a correction](../../issues/new?template=correction.yml) with a source URL
+- No GitHub account? [Request a rating or send a correction](https://nndahedeyo.github.io/token-charter/request/?lang=en) (becomes an issue once a day)
 - Want to change a score? See [CONTRIBUTING.md](CONTRIBUTING.md)
 - Setting up this repository? See [SETUP.md](SETUP.md)
 

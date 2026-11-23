@@ -227,7 +227,7 @@ function render(){
       <td><span class="dots">${dots(t.v)}</span></td>
       <td class="num">${bar(t.a)}</td><td class="num">${bar(t.m)}</td>
       <td>${esc(t.c)}</td><td>${t.k}</td></tr>`;
-    if(open===t.s){h+=`<tr class="detail"><td colspan="8"><div class="detail-grid"><div class="why"><p>${esc(t.note)}</p><p class="src">根拠：${t.src.map(([l,u])=>`<a href="${esc(u)}" target="_blank" rel="noopener">${esc(l)}</a>`).join("　")}</p>${metLine(t)}<p class="src">確認日：${esc(t.rev)}${REPO?`　<a href="${REPO}/issues/new?template=correction.yml&title=${encodeURIComponent("[訂正] "+t.s)}" target="_blank" rel="noopener">この銘柄の訂正を提案する</a>`:""}</p></div>
+    if(open===t.s){h+=`<tr class="detail"><td colspan="8"><div class="detail-grid"><div class="why"><p>${esc(t.note)}</p><p class="src">根拠：${t.src.map(([l,u])=>`<a href="${esc(u)}" target="_blank" rel="noopener">${esc(l)}</a>`).join("　")}</p>${metLine(t)}<p class="src">確認日：${esc(t.rev)}${REPO?`　<a href="${REPO}/issues/new?template=correction.yml&title=${encodeURIComponent("[訂正] "+t.s)}" target="_blank" rel="noopener">この銘柄の訂正を提案する</a>`:""}　<a href="${BASE}request/?t=fix&coin=${encodeURIComponent(t.s)}">GitHubなしで訂正を送る</a></p></div>
       <ul>${t.v.map((x,i)=>`<li><span>${i+1}. ${esc(I[i].name)}</span><b>${x===null?'—':x}</b></li>`).join("")}</ul></div></td></tr>`}
     return h}).join("");
 }
@@ -240,5 +240,5 @@ $("#crit").innerHTML=I.map(i=>`<article><header><h3>${esc(i.name)}</h3><span><sp
   <div class="eq">株式での対応：${esc(i.eq)}</div></article>`).join("");
 {const n=T.filter(x=>x.v[4]===2).length;document.getElementById("gap-note").textContent=n===0?`担保つきの約束をしている銘柄は、${T.length}銘柄のうち一つもありません（項目5で2点の銘柄はゼロ）。ここがトークン憲章の埋めたい空白です。`:`担保つきの約束をしている銘柄は、${T.length}銘柄のうち${n}銘柄です（項目5で2点）。`}
 render();
-if(REPO){document.getElementById("repo-links").innerHTML=` <a href="${REPO}/blob/main/RULES.md" target="_blank" rel="noopener">編集ルール</a> · <a href="${REPO}" target="_blank" rel="noopener">GitHub</a> · <a href="${BASE}data/tokens.json" target="_blank" rel="noopener">生データ</a>`}
+if(REPO){document.getElementById("repo-links").innerHTML=` <a href="${REPO}/blob/main/RULES.md" target="_blank" rel="noopener">編集ルール</a> · <a href="${REPO}" target="_blank" rel="noopener">GitHub</a> · <a href="${BASE}data/tokens.json" target="_blank" rel="noopener">生データ</a> · <a href="${BASE}request/">評価を頼む・訂正を送る（GitHubなし）</a>`}
 </script>

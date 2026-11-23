@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>トークン憲章へ送る</title>
+<meta name="color-scheme" content="light dark">
+<style>
+/* GitHub がなくても、評価の希望と訂正を送れる窓口。送った内容は Nostr に出て、1日1回まとめて課題（Issue）になる */
+:root{--paper:#F3F5F8;--sheet:#FFFFFF;--ink:#16202E;--muted:#5B6676;--line:#D8DEE6;--seal:#1B5E63;--seal-soft:#E1EEEE;--warn:#B23A3A;--on-seal:#FFFFFF;
+  --f-display:"Hiragino Mincho ProN","Yu Mincho",serif;--f-body:"Hiragino Sans","Yu Gothic",system-ui,sans-serif}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--paper:#0F1520;--sheet:#161E2B;--ink:#E6EBF2;--muted:#9AA6B6;--line:#2A3544;--seal:#6FC2C3;--seal-soft:#1B3236;--warn:#E57373;--on-seal:#0F1520;color-scheme:dark}}
+:root[data-theme="dark"]{--paper:#0F1520;--sheet:#161E2B;--ink:#E6EBF2;--muted:#9AA6B6;--line:#2A3544;--seal:#6FC2C3;--seal-soft:#1B3236;--warn:#E57373;--on-seal:#0F1520;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font:15px/1.75 var(--f-body)}
+.wrap{max-width:560px;margin:0 auto;padding-block:32px 56px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:20px}
+h1{font-family:var(--f-display);font-size:28px;margin:0;line-height:1.3;text-wrap:balance}
+p{margin:0}
+.muted{color:var(--muted);font-size:13px}
+a{color:var(--seal)}
+.tabs{display:flex;gap:8px}
+.tabs button{flex:1;font:inherit;border:1px solid var(--line);background:var(--sheet);color:var(--ink);border-radius:12px;padding:10px;min-height:44px;cursor:pointer}
+.tabs button[aria-pressed="true"]{border-color:var(--seal);background:var(--seal-soft);font-weight:700}
+form{background:var(--sheet);border:1px solid var(--line);border-radius:16px;padding:18px;display:flex;flex-direction:column;gap:14px}
+label{display:flex;flex-direction:column;gap:6px;font-size:14px;font-weight:700}
+label small{font-weight:400;color:var(--muted)}
+input,select,textarea{font:inherit;color:var(--ink);background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:10px 12px;min-height:44px;width:100%;max-width:100%}
+textarea{min-height:110px;resize:vertical}
+.radios{display:flex;flex-direction:column;gap:6px;font-weight:400}
+.radios label{flex-direction:row;align-items:center;gap:8px;font-weight:400}
+.radios input{width:auto;min-height:0}
+button.send{font:inherit;font-weight:700;border:0;border-radius:12px;background:var(--seal);color:var(--on-seal);min-height:48px;cursor:pointer}
+button.send:disabled{opacity:.6;cursor:default}
+button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid var(--seal);outline-offset:2px}
+#msg{min-height:1.5em}
+#msg.err{color:var(--warn)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a href="../" id="back">← トークン憲章</a>
+  <h1 id="h">トークン憲章へ送る</h1>
+  <p class="muted" id="lead">GitHub のアカウントはいりません。送った内容は Nostr に公開され、1日に1回まとめて憲章の課題（GitHub の Issue）になります。点数を変えるのは、出典つきの提案と承認だけです。</p>
+  <div class="tabs" role="group" id="tabs">
+    <button type="button" data-t="add" aria-pressed="true" id="tab-add">評価を頼む</button>
+    <button type="button" data-t="fix" aria-pressed="false" id="tab-fix">訂正を送る</button>
+  </div>
+  <form id="f" novalidate>
+    <div id="add">
+      <label for="coin"><span id="l-coin">銘柄</span><small id="s-coin">CoinGecko の銘柄ページの URL か、その最後の名前（例：bitcoin）</small><input id="coin" maxlength="200" autocomplete="off" autocapitalize="off" spellcheck="false"></label>
+      <label for="why" style="margin-top:14px"><span id="l-why">評価してほしい理由（任意）</span><textarea id="why" maxlength="300"></textarea></label>
+    </div>
+    <div id="fix" hidden>
+      <label for="tok"><span id="l-tok">銘柄</span><select id="tok"></select></label>
+      <label for="item" style="margin-top:14px"><span id="l-item">項目</span><select id="item"></select></label>
+      <label for="what" style="margin-top:14px"><span id="l-what">何が違うか</span><small id="s-what">いまの内容と、正しいと考える内容</small><textarea id="what" maxlength="600"></textarea></label>
+      <label for="src" style="margin-top:14px"><span id="l-src">出典の URL</span><small id="s-src">出典がない訂正は受け付けません</small><input id="src" type="url" maxlength="300" placeholder="https://" autocomplete="off" autocapitalize="off" spellcheck="false"></label>
+      <div class="radios" role="radiogroup" aria-labelledby="l-int" style="margin-top:14px"><b id="l-int" style="font-size:14px">利害の開示</b>
+        <label for="int-no"><input type="radio" name="int" id="int-no" value="none" checked><span id="t-int-no">この銘柄と利害関係はない</span></label>
+        <label for="int-yes"><input type="radio" name="int" id="int-yes" value="insider"><span id="t-int-yes">関係者または大口保有者である</span></label>
+      </div>
+    </div>
+    <button type="submit" class="send" id="send">送る</button>
+    <p id="msg" role="status" aria-live="polite"></p>
+  </form>
+  <p class="muted" id="foot">送るときに、使い捨てのかぎで署名します。あなたの名前や端末の情報は入りません。荒らしを防ぐため、送る前に端末で少しだけ計算をします（数秒）。</p>
+</div>
+<script src="sig.js"></script>
+<script>
+"use strict";
+const qs = new URLSearchParams(location.search);
+const L = qs.get("lang") === "en" ? "en" : qs.get("lang") === "ja" ? "ja" : /^ja\b/i.test(navigator.language || "ja") ? "ja" : "en";
+const KIND = 7730, TAG = "token-charter", POW = 14;
+const RELAYS = ["wss://relay.damus.io", "wss://nos.lol", "wss://relay.primal.net", "wss://relay.nostr.band"];
+const EN = {
+  h: "Send to Token Charter", back: "← Token Charter", tab_add: "Request a rating", tab_fix: "Send a correction",
+  lead: "No GitHub account needed. What you send is published on Nostr and turned into charter issues (GitHub Issues) once a day. Scores only change through sourced proposals and approvals.",
+  l_coin: "Coin", s_coin: "A CoinGecko coin page URL, or the last part of it (e.g. bitcoin)", l_why: "Why it should be rated (optional)",
+  l_tok: "Token", l_item: "Item", l_what: "What is wrong", s_what: "The current content and what you think is correct", l_src: "Source URL", s_src: "Corrections without a source are not accepted",
+  l_int: "Disclosure", int_no: "No interest in this token", int_yes: "I'm on the team or a large holder", send: "Send",
+  foot: "Each message is signed with a throwaway key. Your name and device details are not included. To prevent spam, your device does a few seconds of work before sending.",
+  summary: "Summary text", needCoin: "Enter a CoinGecko URL or coin id.", needWhat: "Write what is wrong.", needSrc: "Enter a source URL starting with https://.",
+  rated: "This coin is already in the charter. Use “Send a correction” instead.", working: "Preparing…", sending: "Sending…",
+  ok: n => `Sent to ${n} relay${n > 1 ? "s" : ""}. It will appear as a charter issue within a day.`, fail: "Couldn't reach any relay. Check your connection and try again.", see: "See the issues",
+};
+const tr = (k, ja) => L === "en" ? EN[k] : ja;
+if (L === "en") {
+  document.documentElement.lang = "en"; document.title = EN.h;
+  const set = (id, k) => { const e = document.getElementById(id); if (e) e.textContent = EN[k]; };
+  [["h", "h"], ["back", "back"], ["tab-add", "tab_add"], ["tab-fix", "tab_fix"], ["lead", "lead"], ["l-coin", "l_coin"], ["s-coin", "s_coin"], ["l-why", "l_why"], ["l-tok", "l_tok"], ["l-item", "l_item"],
+   ["l-what", "l_what"], ["s-what", "s_what"], ["l-src", "l_src"], ["s-src", "s_src"], ["l-int", "l_int"], ["t-int-no", "int_no"], ["t-int-yes", "int_yes"], ["send", "send"], ["foot", "foot"]].forEach(([i, k]) => set(i, k));
+  document.getElementById("back").href = "../en/";
+}
+const $ = id => document.getElementById(id);
+let mode = qs.get("t") === "fix" ? "fix" : "add", tokens = [], items = [];
+function setMode(m) { mode = m; $("add").hidden = m !== "add"; $("fix").hidden = m !== "fix"; document.querySelectorAll("[data-t]").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.t === m))); $("msg").textContent = ""; }
+document.querySelectorAll("[data-t]").forEach(b => b.onclick = () => setMode(b.dataset.t));
+// CoinGecko の URL か名前から、銘柄の名前（id）を取り出す
+const coinId = v => { v = String(v || "").trim(); const m = v.match(/coingecko\.com\/(?:[a-z-]+\/)?(?:coins|%E3%82%B3%E3%82%A4%E3%83%B3|コイン)\/([a-z0-9-]+)/i); const id = (m ? m[1] : v).toLowerCase(); return /^[a-z0-9-]{1,64}$/.test(id) ? id : ""; };
+$("coin").value = qs.get("coin") || "";
+Promise.all(["../data/tokens.json", "../data/criteria.json"].map(u => fetch(u).then(r => r.json()))).then(([tk, cr]) => {
+  tokens = tk.tokens || []; items = cr.items || [];
+  $("tok").innerHTML = tokens.map(t => `<option value="${t.symbol}">${t.symbol}</option>`).join("");
+  $("item").innerHTML = items.map(i => `<option value="${i.no}">${i.no}. ${L === "en" ? i.name_en : i.name}</option>`).join("") + `<option value="summary">${tr("summary", "要約の文章")}</option>`;
+  const want = (qs.get("coin") || "").toUpperCase(), hit = tokens.find(t => t.symbol === want || t.coingecko === qs.get("coin"));
+  if (hit) $("tok").value = hit.symbol;
+}).catch(() => {});
+setMode(mode);
+const msg = (t, err) => { $("msg").textContent = t; $("msg").className = err ? "err" : ""; };
+// 荒らしを防ぐ小さな計算（NIP-13）：イベントの番号の先頭が0のビットで POW 個そろうまで、nonce を変えて計算する
+const zeros = hex => { let n = 0; for (const c of hex) { const v = parseInt(c, 16); if (v === 0) { n += 4; continue; } n += Math.clz32(v) - 28; break; } return n; };
+async function mine(ev) { for (let i = 0; ; i++) { ev.tags[0] = ["nonce", String(i), String(POW)]; if (zeros(await Sig.eventId(ev)) >= POW) return ev; } }
+function publish(ev) {
+  return Promise.all(RELAYS.map(u => new Promise(res => {
+    let ws, done = false; const end = ok => { if (done) return; done = true; try { ws.close(); } catch (e) {} res(ok); };
+    try { ws = new WebSocket(u); } catch (e) { return res(false); }
+    ws.onopen = () => ws.send(JSON.stringify(["EVENT", ev]));
+    ws.onmessage = m => { try { const d = JSON.parse(m.data); if (d[0] === "OK" && d[1] === ev.id) end(!!d[2]); } catch (e) {} };
+    ws.onerror = () => end(false); setTimeout(() => end(false), 8000);
+  }))).then(r => r.filter(Boolean).length);
+}
+$("f").onsubmit = async e => {
+  e.preventDefault();
+  let c;
+  if (mode === "add") {
+    const id = coinId($("coin").value); if (!id) return msg(tr("needCoin", "CoinGecko の URL か、銘柄の名前を入れてください。"), true);
+    if (tokens.some(t => t.coingecko === id)) return msg(tr("rated", "この銘柄はもう憲章にあります。「訂正を送る」から送ってください。"), true);
+    c = {t: "add", coin: id, why: $("why").value.trim().slice(0, 300)};
+  } else {
+    const what = $("what").value.trim(), src = $("src").value.trim();
+    if (!what) return msg(tr("needWhat", "何が違うかを書いてください。"), true);
+    if (!/^https:\/\/[^\s]+$/.test(src)) return msg(tr("needSrc", "https:// で始まる出典の URL を入れてください。"), true);
+    c = {t: "fix", token: $("tok").value, item: $("item").value, what: what.slice(0, 600), source: src.slice(0, 300), interest: document.querySelector("input[name=int]:checked").value};
+  }
+  $("send").disabled = true; msg(tr("working", "準備しています…"));
+  try {
+    const sk = Sig.newKey();
+    const ev = {kind: KIND, created_at: Math.floor(Date.now() / 1000), tags: [["nonce", "0", String(POW)], ["t", TAG]], content: JSON.stringify(c), pubkey: Sig.hex(Sig.pubkey(Sig.unhex(sk)))};
+    await mine(ev);
+    const signed = await Sig.signEvent(ev, sk);
+    msg(tr("sending", "送っています…"));
+    const n = await publish(signed);
+    if (!n) { msg(tr("fail", "どの中継にもつながりませんでした。通信を確かめて、もう一度送ってください。"), true); return; }
+    $("f").reset(); if (tokens.length) $("tok").value = c.token || tokens[0].symbol;
+    msg(L === "en" ? EN.ok(n) : `${n}か所の中継に送りました。1日以内に憲章の課題になります。`);
+  } catch (x) { msg(tr("fail", "どの中継にもつながりませんでした。通信を確かめて、もう一度送ってください。"), true); }
+  finally { $("send").disabled = false; }
+};
+</script>
+</body>
+</html>
