@@ -13,7 +13,7 @@
 
 提案は、承認できる人の承認がそろうと自動で反映されます（[RULES.md](RULES.md)「承認」）。反映された提案が3件になると、あなたも承認できる人になります（[APPROVERS.md](APPROVERS.md)）。
 
-コードが分からなくても、「訂正の提案」（Issue）から出典を添えて知らせるだけでも構いません。誰かが提案の形にします。GitHub のアカウントがなければ、[GitHubなしの窓口](https://nndahedeyo.github.io/token-charter/request/)から送れます。
+コードが分からなくても、[訂正を送る](https://nndahedeyo.github.io/token-charter/request/)から出典を添えて知らせるだけでも構いません。誰かが提案の形にします。
 
 ## 銘柄を追加する
 
@@ -28,4 +28,4 @@
 
 Proposals merge automatically once approvers approve ([RULES.en.md](RULES.en.md)). After 3 merged proposals, you become an approver too ([APPROVERS.md](APPROVERS.md)).
 
-If you don't write code, open a "Correction" Issue with your source. Someone will turn it into a proposal. Without a GitHub account, use the [no-GitHub window](https://nndahedeyo.github.io/token-charter/request/?lang=en).
+If you don't write code, [send a correction](https://nndahedeyo.github.io/token-charter/request/?lang=en) with your source. Someone will turn it into a proposal.

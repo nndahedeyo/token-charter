@@ -1,4 +1,4 @@
-"""GitHubなしの窓口（scripts/intake.py）を、あらゆる送られ方で確かめる。python tests/test_intake.py"""
+"""評価の希望と訂正の窓口（scripts/intake.py）を、あらゆる送られ方で確かめる。python tests/test_intake.py"""
 import hashlib
 import json
 import sys

@@ -6,7 +6,7 @@
 <title>トークン憲章へ送る</title>
 <meta name="color-scheme" content="light dark">
 <style>
-/* GitHub がなくても、評価の希望と訂正を送れる窓口。送った内容は Nostr に出て、1日1回まとめて課題（Issue）になる */
+/* 評価の希望と訂正を送る窓口。送った内容は Nostr に出て、1日1回まとめて課題（Issue）になる */
 :root{--paper:#F3F5F8;--sheet:#FFFFFF;--ink:#16202E;--muted:#5B6676;--line:#D8DEE6;--seal:#1B5E63;--seal-soft:#E1EEEE;--warn:#B23A3A;--on-seal:#FFFFFF;
   --f-display:"Hiragino Mincho ProN","Yu Mincho",serif;--f-body:"Hiragino Sans","Yu Gothic",system-ui,sans-serif}
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--paper:#0F1520;--sheet:#161E2B;--ink:#E6EBF2;--muted:#9AA6B6;--line:#2A3544;--seal:#6FC2C3;--seal-soft:#1B3236;--warn:#E57373;--on-seal:#0F1520;color-scheme:dark}}
@@ -40,7 +40,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 <div class="wrap">
   <a href="../" id="back">← トークン憲章</a>
   <h1 id="h">トークン憲章へ送る</h1>
-  <p class="muted" id="lead">GitHub のアカウントはいりません。送った内容は Nostr に公開され、1日に1回まとめて憲章の課題（GitHub の Issue）になります。点数を変えるのは、出典つきの提案と承認だけです。</p>
+  <p class="muted" id="lead">誰でも送れます。送った内容は Nostr に公開され、1日に1回まとめて憲章の課題になります。点数を変えるのは、出典つきの提案と承認だけです。</p>
   <div class="tabs" role="group" id="tabs">
     <button type="button" data-t="add" aria-pressed="true" id="tab-add">評価を頼む</button>
     <button type="button" data-t="fix" aria-pressed="false" id="tab-fix">訂正を送る</button>
@@ -74,7 +74,7 @@ const KIND = 7730, TAG = "token-charter", POW = 14;
 const RELAYS = ["wss://relay.damus.io", "wss://nos.lol", "wss://relay.primal.net", "wss://relay.nostr.band"];
 const EN = {
   h: "Send to Token Charter", back: "← Token Charter", tab_add: "Request a rating", tab_fix: "Send a correction",
-  lead: "No GitHub account needed. What you send is published on Nostr and turned into charter issues (GitHub Issues) once a day. Scores only change through sourced proposals and approvals.",
+  lead: "Anyone can send. What you send is published on Nostr and turned into charter issues once a day. Scores only change through sourced proposals and approvals.",
   l_coin: "Coin", s_coin: "A CoinGecko coin page URL, or the last part of it (e.g. bitcoin)", l_why: "Why it should be rated (optional)",
   l_tok: "Token", l_item: "Item", l_what: "What is wrong", s_what: "The current content and what you think is correct", l_src: "Source URL", s_src: "Corrections without a source are not accepted",
   l_int: "Disclosure", int_no: "No interest in this token", int_yes: "I'm on the team or a large holder", send: "Send",

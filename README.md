@@ -32,8 +32,7 @@
 
 ## 参加する
 
-- 誤りを見つけたら：[訂正の提案](../../issues/new?template=correction.yml)（出典のURLを添えてください）
-- GitHub のアカウントがなくても：[評価を頼む・訂正を送る](https://nndahedeyo.github.io/token-charter/request/)（1日1回、自動で課題になります）
+- 誤りを見つけたら・評価してほしい銘柄があれば：[評価を頼む・訂正を送る](https://nndahedeyo.github.io/token-charter/request/)（訂正には出典のURLを添えてください。1日1回、自動で課題になります）
 - 点数を直したいとき：[CONTRIBUTING.md](CONTRIBUTING.md)
 - このリポジトリを立ち上げる人へ：[SETUP.md](SETUP.md)
 

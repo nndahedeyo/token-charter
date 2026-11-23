@@ -86,7 +86,7 @@ def main():
         dest.mkdir(parents=True, exist_ok=True)
         (dest / "index.html").write_text(html, encoding="utf-8")
     shutil.copytree(ROOT / "data", out / "data")  # 生データも公開して、誰でも検証できるようにする
-    # GitHub なしの窓口（評価の希望と訂正を Nostr に送るページ）
+    # 評価の希望と訂正の窓口（評価の希望と訂正を Nostr に送るページ）
     (out / "request").mkdir(parents=True, exist_ok=True)
     for f, to in (("request.html", "index.html"), ("sig.js", "sig.js")):
         shutil.copy(ROOT / "site" / f, out / "request" / to)

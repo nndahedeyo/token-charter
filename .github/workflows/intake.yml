@@ -1,6 +1,6 @@
 name: intake
 
-# GitHub なしの窓口：Nostr に届いた「評価の希望」と「訂正」を、1日1回、課題（Issue、目印「from-nostr」）にする（RULES.md）。
+# 評価の希望と訂正の窓口：Nostr に届いた「評価の希望」と「訂正」を、1日1回、課題（Issue、目印「from-nostr」）にする（RULES.md）。
 # 点数は変えない。届いた文はデータとして扱い、実行しない。動くのは常に main の版。
 on:
   schedule:

@@ -66,9 +66,9 @@ Changes to these rules, the approver list (`APPROVERS.md`), the criteria (`data/
 - **Only humans approve or object.** Anyone who has an AI approve or object, or approves from an AI-run account, gets listed under "Removed". This stops one person from minting approvers by running many agents
 - **A watcher flags changes automatically.** Every day it opens issues (label `watch`) for tokens whose last-30-day revenue fell to half or less of the 30 days before (with the median across all tokens, to show whether it's market-wide), and for sources that no longer open. It never changes scores or judges anything
 
-## The no-GitHub window
+## Requests and corrections
 
-- **You can request a rating or send a correction without a GitHub account**, from "Request a rating or send a correction (no GitHub)" on the charter page. What you send is published on Nostr, signed with a throwaway key. No name needed
+- **Anyone can request a rating or send a correction**, from "Request a rating or send a correction" on the charter page. What you send is published on Nostr, signed with a throwaway key. No name needed
 - **Once a day it becomes an issue automatically** (label `from-nostr`). Rating requests are grouped per coin with the number of senders ("n requests"); since throwaway keys are counted, the number is approximate. Corrections without a source URL are not accepted
 - **Scores do not change.** These issues are prompts for people to check sources and open a proposal. Only sourced proposals with approvals change scores, as before
 - **To prevent spam**, your device does a few seconds of work before sending, and at most 5 new issues are opened per day. Issues matching a closed one are not reopened. Received text is treated as data and never executed

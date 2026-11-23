@@ -1,6 +1,6 @@
-"""GitHub なしの窓口：Nostr に届いた「評価の希望」と「訂正」を、憲章の課題（Issue）にする。
+"""評価の希望と訂正の窓口：Nostr に届いた「評価の希望」と「訂正」を、憲章の課題（Issue）にする。
 
-点数は変えない。判断もしない。人が確かめるきっかけを作るだけ（RULES.md「GitHubなしの窓口」）。
+点数は変えない。判断もしない。人が確かめるきっかけを作るだけ（RULES.md「評価の希望と訂正の窓口」）。
 - 届いた文はデータとして扱い、決して実行しない。課題に書くときは、@ や # の働きを止め、引用として載せる
 - 署名と、荒らしを防ぐ小さな計算（NIP-13、先頭の0が14ビット以上）を確かめる。満たさないものは捨てる
 - 評価の希望：銘柄ごとに1つの課題にまとめ、送った人（使い捨てのかぎ）の数を「希望 n件」として書き直す
@@ -163,8 +163,8 @@ def group(entries):
 def add_issue(coin, g):
     title = f"[追加の希望] {coin}"
     reasons = "\n".join(f"> {w}" for w in g["why"][:10]) or "> （理由の記入なし / no reason given）"
-    body = (f"GitHub なしの窓口（Nostr）に届いた、トークン憲章への追加の希望です。\n"
-            f"A request to add this coin, received through the no-GitHub window (Nostr).\n\n"
+    body = (f"窓口（Nostr）に届いた、トークン憲章への追加の希望です。\n"
+            f"A request to add this coin, received through the request window (Nostr).\n\n"
             f"- CoinGecko: https://www.coingecko.com/en/coins/{coin}\n"
             f"- 希望 / Requests: **{len(g['who'])}件**（送った人の数。使い捨てのかぎで数えるので目安 / counted by throwaway keys, so approximate）\n\n"
             f"届いた理由 / Reasons received:\n\n{reasons}\n\n"
@@ -178,8 +178,8 @@ def fix_issue(key, e):
     tok, item, src = key
     h = hashlib.sha256(src.encode()).hexdigest()[:8]
     title = f"[訂正] {tok} 項目{item} ({h})" if item != "summary" else f"[訂正] {tok} 要約 ({h})"
-    body = (f"GitHub なしの窓口（Nostr）に届いた訂正です。点数は変わっていません。出典を確かめてから提案にしてください。\n"
-            f"A correction received through the no-GitHub window (Nostr). No score has changed. Check the source before turning it into a proposal.\n\n"
+    body = (f"窓口（Nostr）に届いた訂正です。点数は変わっていません。出典を確かめてから提案にしてください。\n"
+            f"A correction received through the request window (Nostr). No score has changed. Check the source before turning it into a proposal.\n\n"
             f"- 銘柄 / Token: {tok}\n- 項目 / Item: {item}\n- 出典 / Source: {src}\n"
             f"- 利害の開示 / Disclosure: {'関係者または大口保有者 / team or large holder' if e['insider'] else '利害関係なし / no interest'}\n\n"
             f"何が違うか / What is wrong:\n\n> {e['what']}\n\n<!-- intake:fix:{tok}:{item}:{h} -->")
@@ -248,7 +248,7 @@ def main():
     data = load("tokens.json")
     events = fetch(now)
     print(f"events: {len(events)}")
-    subprocess.run(["gh", "label", "create", LABEL, "--color", "5B6676", "--description", "GitHubなしの窓口（Nostr）から届いたもの"], capture_output=True)
+    subprocess.run(["gh", "label", "create", LABEL, "--color", "5B6676", "--description", "評価の希望と訂正の窓口（Nostr）から届いたもの"], capture_output=True)
     raw = json.loads(gh("issue", "list", "--label", LABEL, "--state", "all", "--limit", "500", "--json", "number,title,state,body"))
     existing = {i["title"]: i for i in raw}
     new, edit = plan(events, data, now, existing)
