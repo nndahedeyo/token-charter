@@ -19,7 +19,7 @@ import time
 from common import load
 
 KIND, TAG, POW = 7730, "token-charter", 14
-RELAYS = ["wss://relay.damus.io", "wss://nos.lol", "wss://relay.primal.net", "wss://relay.nostr.band"]
+RELAYS = ["wss://relay.damus.io", "wss://nos.lol", "wss://relay.primal.net", "wss://relay.nostr.band", "wss://offchain.pub", "wss://nostr.mom", "wss://relay.snort.social", "wss://nostr.wine"]
 DAYS = 30           # 30日以内に届いたものを見る
 MAX_NEW = 5         # 1回に新しく作る課題の上限
 LABEL = "from-nostr"
@@ -198,6 +198,7 @@ async def fetch_relay(url, since):
                     out.append(d[2])
                 elif d[0] == "EOSE":
                     break
+        print(f"{url}: ok {len(out)}")
     except Exception as x:
         print(f"{url}: {type(x).__name__}", file=sys.stderr)
     return out
