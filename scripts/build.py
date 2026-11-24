@@ -39,6 +39,7 @@ def tokens_for(lang, data, crit, metrics, icons):
             "src": src, "rev": t["reviewed"],
             "met": {k: m[k].get("d30") for k in ("revenue", "holders") if isinstance(m.get(k), dict)} or None,
             "metAt": m.get("date"), "ic": t["symbol"] in icons,
+            "rt": t.get("role_tag_en" if lang == "en" else "role_tag", ""), "r": t.get("role_en" if lang == "en" else "role", ""),
         })
     return out
 

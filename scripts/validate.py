@@ -67,6 +67,10 @@ def check_format(data, crit):
             err(f"{sym}: note は300文字以内にしてください")
         if len(t.get("note_en", "")) > 600:
             err(f"{sym}: note_en は600文字以内にしてください")
+        # 役割（何のためのトークンか）：点数ではない説明。短く、どの銘柄にも
+        for k, lim in (("role_tag", 20), ("role", 120), ("role_tag_en", 40), ("role_en", 240)):
+            if not isinstance(t.get(k), str) or not t[k].strip() or len(t[k]) > lim:
+                err(f"{sym}: {k} は1〜{lim}文字で書いてください（何のためのトークンか）")
 
 
 def git(*args):

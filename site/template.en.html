@@ -1,244 +1,296 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
 <title>Token Charter</title>
-<meta name="claude:viewport-fit-sides" content="cover">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@600;800&family=Zen+Kaku+Gothic+New:wght@400;500;700&family=IBM+Plex+Mono:wght@400;600&display=swap">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@800&family=Zen+Kaku+Gothic+New:wght@400;500;700&family=IBM+Plex+Mono:wght@500;600&display=swap">
 <style>
-/* Layout: single column like an official document: charter intro, interactive ledger, then criteria and plan */
 :root{
-  --paper:#F3F5F8; --sheet:#FFFFFF; --ink:#16202E; --muted:#5B6676; --line:#D8DEE6;
-  --seal:#1B5E63; --seal-soft:#E1EEEE;
-  --gA:#1F7A4D; --gB:#3D8B6E; --gC:#A07A16; --gD:#B5602A; --gE:#B23A3A;
-  --dot-on:#1B5E63; --dot-half:#8DB9BB; --dot-off:#D8DEE6;
+  --paper:#F3F5F8;--sheet:#FFFFFF;--ink:#16202E;--muted:#5B6676;--line:#D8DEE6;--seal:#1B5E63;--seal-soft:#E1EEEE;--on-seal:#FFFFFF;
+  --gA:#1F7A4D;--gB:#3D8B6E;--gC:#A07A16;--gD:#B5602A;--gE:#B23A3A;
+  --s2:#1B5E63;--s1:#8DB9BB;--s0:#FFFFFF;--s0line:#B9C3CF;
   --f-display:"Shippori Mincho B1","Hiragino Mincho ProN","Yu Mincho",serif;
   --f-body:"Zen Kaku Gothic New","Hiragino Sans","Yu Gothic",system-ui,sans-serif;
   --f-mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
 }
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
-  --paper:#0F1520; --sheet:#161E2B; --ink:#E6EBF2; --muted:#9AA6B6; --line:#2A3544;
-  --seal:#6FC2C3; --seal-soft:#1B3236;
-  --gA:#5CC48E; --gB:#79C2A5; --gC:#D9B64E; --gD:#E5915C; --gE:#E57373;
-  --dot-on:#6FC2C3; --dot-half:#3F7476; --dot-off:#2A3544; color-scheme:dark}}
+  --paper:#0F1520;--sheet:#161E2B;--ink:#E6EBF2;--muted:#9AA6B6;--line:#2A3544;--seal:#6FC2C3;--seal-soft:#1B3236;--on-seal:#0F1520;
+  --gA:#5CC48E;--gB:#79C2A5;--gC:#D9B64E;--gD:#E5915C;--gE:#E57373;--s2:#6FC2C3;--s1:#3F7476;--s0:#161E2B;--s0line:#4A5768;color-scheme:dark}}
 :root[data-theme="dark"]{
-  --paper:#0F1520; --sheet:#161E2B; --ink:#E6EBF2; --muted:#9AA6B6; --line:#2A3544;
-  --seal:#6FC2C3; --seal-soft:#1B3236;
-  --gA:#5CC48E; --gB:#79C2A5; --gC:#D9B64E; --gD:#E5915C; --gE:#E57373;
-  --dot-on:#6FC2C3; --dot-half:#3F7476; --dot-off:#2A3544; color-scheme:dark}
+  --paper:#0F1520;--sheet:#161E2B;--ink:#E6EBF2;--muted:#9AA6B6;--line:#2A3544;--seal:#6FC2C3;--seal-soft:#1B3236;--on-seal:#0F1520;
+  --gA:#5CC48E;--gB:#79C2A5;--gC:#D9B64E;--gD:#E5915C;--gE:#E57373;--s2:#6FC2C3;--s1:#3F7476;--s0:#161E2B;--s0line:#4A5768;color-scheme:dark}
 *{box-sizing:border-box}
-body{background:var(--paper);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.75}
-.wrap{max-width:1080px;margin:0 auto;padding-block:40px 64px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:56px}
-h1,h2{font-family:var(--f-display);font-weight:800;text-wrap:balance;margin:0;line-height:1.3}
-h1{font-size:clamp(34px,6vw,56px);letter-spacing:.04em}
-h2{font-size:26px}
+body{background:var(--paper);color:var(--ink);font:15px/1.75 var(--f-body)}
+.wrap{max-width:720px;margin:0 auto;padding-block:20px 56px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:36px}
+h1,h2{font-family:var(--f-display);font-weight:800;margin:0;line-height:1.3;text-wrap:balance}
+h1{font-size:34px;letter-spacing:.04em}
+h2{font-size:22px}
 p{margin:0}
-.eyebrow{font-size:12px;letter-spacing:.14em;color:var(--seal);font-weight:700}
-.prose{max-width:40em;display:flex;flex-direction:column;gap:12px}
+a{color:var(--seal)}
 .muted{color:var(--muted)}
-section{display:flex;flex-direction:column;gap:20px}
-header.hero{display:grid;grid-template-columns:1fr auto;gap:32px;align-items:end;border-bottom:2px solid var(--ink);padding-bottom:28px}
-.hero .lead{font-size:17px;max-width:34em;margin-top:16px}
-.stamp{width:132px;height:132px;border:3px solid var(--seal);border-radius:50%;display:grid;place-items:center;text-align:center;color:var(--seal);font-family:var(--f-display);font-weight:800;font-size:15px;line-height:1.35;transform:rotate(-8deg)}
-.stamp small{display:block;font-family:var(--f-mono);font-size:10px;font-weight:400;letter-spacing:.08em}
-.meta{display:flex;flex-wrap:wrap;gap:8px 20px;font-size:13px;color:var(--muted);margin-top:14px}
-.dist{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;background:var(--line);border:1px solid var(--line)}
-.dist div{background:var(--sheet);padding:14px 16px;display:flex;flex-direction:column;gap:4px;min-width:0}
-.dist b{font-family:var(--f-mono);font-size:26px;font-weight:600}
-.dist span{font-size:12px;color:var(--muted)}
-.dist .syms{font-family:var(--f-mono);font-size:11px;color:var(--ink);line-height:1.5;word-break:break-word}
-.controls{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
-.chip{font:inherit;font-size:13px;border:1px solid var(--line);background:var(--sheet);color:var(--ink);padding:5px 12px;border-radius:999px;cursor:pointer}
-.chip[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
-.chip:focus-visible,th button:focus-visible,tr.row:focus-visible{outline:2px solid var(--seal);outline-offset:2px}
-.legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:12px;color:var(--muted);align-items:center}
-.scroll{overflow-x:auto;border:1px solid var(--line);background:var(--sheet)}
-table{border-collapse:collapse;width:100%;font-size:13px}
-th,td{padding:9px 10px;border-bottom:1px solid var(--line);text-align:left;vertical-align:middle;white-space:nowrap}
-th{font-size:11px;color:var(--muted);font-weight:500;background:var(--sheet);position:sticky;top:0}
-th button{all:unset;cursor:pointer}
-th button[data-dir]::after{content:attr(data-dir);margin-left:4px;color:var(--seal)}
-td.num{font-family:var(--f-mono);font-variant-numeric:tabular-nums;text-align:right}
-td.sym{font-family:var(--f-mono);font-weight:600}
-.symw{display:inline-flex;align-items:center;gap:8px}
-.ci{width:22px;height:22px;border-radius:50%;flex:none}
-.lang{color:var(--seal);font-weight:700}
-td.sym small{display:block;font-family:var(--f-body);font-weight:400;color:var(--muted);font-size:11px}
-tr.row{cursor:pointer}
-tr.row:hover td{background:var(--seal-soft)}
-.dots{display:inline-flex;gap:3px}
-.dot{width:14px;height:14px;border-radius:3px;background:var(--dot-off)}
-.dot.v2{background:var(--dot-on)} .dot.v1{background:var(--dot-half)}
-.dot.na{background:none;border:1px dashed var(--line)}
-.sep{width:6px}
-.grade{display:inline-grid;place-items:center;width:26px;height:26px;border-radius:4px;color:#fff;font-family:var(--f-mono);font-weight:600}
+.small{font-size:13px}
+section{display:flex;flex-direction:column;gap:14px}
+.eyebrow{font-size:11px;letter-spacing:.14em;color:var(--seal);font-weight:700}
+.hero{display:flex;flex-direction:column;gap:10px}
+.meta{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:12px;color:var(--muted)}
+.cta{background:var(--sheet);border:1px solid var(--line);border-radius:16px;padding:14px;display:flex;flex-direction:column;gap:10px}
+.cta .btns{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.btn{display:flex;align-items:center;justify-content:center;min-height:46px;border-radius:12px;font-weight:700;text-decoration:none;text-align:center;padding:6px 10px;line-height:1.35}
+.btn.main{background:var(--seal);color:var(--on-seal)}
+.btn.sub{background:var(--seal-soft);color:var(--ink)}
+/* grade distribution */
+.dist{display:flex;height:32px;border-radius:10px;overflow:hidden;border:1px solid var(--line)}
+.dist span{display:grid;place-items:center;color:#fff;font:600 13px var(--f-mono);min-width:28px}
+.ask{background:var(--sheet);border:1px solid var(--line);border-radius:12px;padding:8px 12px;line-height:1.6;display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center}
+.askb{display:inline-flex;flex-wrap:wrap;gap:6px 10px;align-items:center}
+.mini{font-size:13px;font-weight:700;text-decoration:none;border:1px solid var(--seal);color:var(--seal);border-radius:999px;padding:2px 10px;white-space:nowrap}
+.mini.main{background:var(--seal);color:var(--on-seal)}
+.cta2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.btn span[aria-hidden]{margin-right:6px}
+.btn.sub{background:var(--sheet)}
+.fixb{font-size:12px;font-weight:700;white-space:nowrap;text-decoration:none;border:1px solid var(--seal);color:var(--seal);border-radius:999px;padding:3px 10px;margin-top:2px}
+.more{margin:0;color:var(--muted)}
+.ic{width:30px;height:30px;border-radius:50%;flex:none;display:inline-grid;place-items:center;font:700 10px var(--f-mono);color:#fff;vertical-align:middle;margin-right:8px;position:relative;overflow:hidden}
+.ic img{position:absolute;inset:0;width:100%;height:100%;border-radius:50%;background:var(--sheet)}
+.ic.mono{background:var(--muted)}
+.sym{display:flex;align-items:center;flex-wrap:wrap}
+.dist button{border:0;padding:0;margin:0;cursor:pointer;display:grid;place-items:center;color:#fff;font:600 13px var(--f-mono);min-width:28px}
+.dist button[aria-pressed="true"]{box-shadow:inset 0 0 0 3px var(--ink)}
 .gA{background:var(--gA)}.gB{background:var(--gB)}.gC{background:var(--gC)}.gD{background:var(--gD)}.gE{background:var(--gE)}
-.bar{display:inline-block;width:56px;height:6px;background:var(--dot-off);border-radius:3px;vertical-align:middle;margin-left:8px;overflow:hidden}
-.bar i{display:block;height:100%;background:var(--seal)}
-tr.detail td{white-space:normal;background:var(--paper);padding:14px 16px}
-.detail-grid{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:20px}
-.why{display:flex;flex-direction:column;gap:8px}
-.src{font-size:12px;color:var(--muted)}
-.src a{color:var(--seal)}
-.detail-grid ul{margin:0;padding:0;list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:4px 16px;font-size:12px}
-.detail-grid li{display:flex;justify-content:space-between;gap:8px;border-bottom:1px dotted var(--line)}
-.detail-grid li b{font-family:var(--f-mono)}
-.crit{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1px;background:var(--line);border:1px solid var(--line)}
-.crit article{background:var(--sheet);padding:16px 18px;display:flex;flex-direction:column;gap:8px;min-width:0}
-.crit header{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
-.crit h3{margin:0;font-size:16px}
-.crit .no{font-family:var(--f-mono);color:var(--seal);font-size:12px}
-.crit dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:3px 10px;font-size:12.5px}
-.crit dt{font-family:var(--f-mono);color:var(--muted)}
-.crit dd{margin:0}
-.crit .eq{font-size:11.5px;color:var(--muted);border-top:1px solid var(--line);padding-top:6px}
-.tag{font-size:11px;border:1px solid var(--line);padding:0 6px;border-radius:3px;color:var(--muted)}
-.cmp td{white-space:normal}
-ol.plan{margin:0;padding:0;list-style:none;counter-reset:s;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}
-ol.plan li{counter-increment:s;border-top:3px solid var(--line);padding-top:12px;display:flex;flex-direction:column;gap:6px}
-ol.plan li.now{border-color:var(--seal)}
-ol.plan li::before{content:"Stage " counter(s);font-family:var(--f-mono);font-size:12px;color:var(--seal)}
-ol.plan b{font-size:15px}
-.note{font-size:13px;color:var(--muted);border-left:3px solid var(--line);padding-left:14px;max-width:46em}
-footer a{color:var(--seal)}
-footer{font-size:12px;color:var(--muted);border-top:1px solid var(--line);padding-top:16px}
-@media (max-width:640px){
-  header.hero{grid-template-columns:1fr}
-  .stamp{width:100px;height:100px;font-size:12px;justify-self:start}
-  .dist{grid-template-columns:repeat(2,1fr)}
-  .detail-grid{grid-template-columns:1fr}
-  .why{display:flex;flex-direction:column;gap:8px}
-.src{font-size:12px;color:var(--muted)}
-.src a{color:var(--seal)}
-.detail-grid ul{grid-template-columns:1fr}
-}
-@media (prefers-reduced-motion:reduce){*{transition:none!important}}
-</style>
+.distsyms{display:grid;grid-template-columns:auto 1fr;gap:2px 10px;font-size:12px}
+.distsyms b{font-family:var(--f-mono)}
+.distsyms span{font-family:var(--f-mono);color:var(--muted);word-break:break-word}
+.gap{border-left:3px solid var(--seal);padding-left:10px;font-size:14px}
+/* filters */
+.tools{display:flex;flex-direction:column;gap:10px}
+.chips{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;margin-inline:-2px;padding:2px}
+.chips::-webkit-scrollbar{display:none}
+.chip{all:unset;cursor:pointer;flex:none;font-size:13px;border:1px solid var(--line);background:var(--sheet);padding:5px 12px;border-radius:999px;white-space:nowrap}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.row2{display:grid;grid-template-columns:1fr auto;gap:8px}
+input,select{font:inherit;font-size:14px;color:var(--ink);background:var(--sheet);border:1px solid var(--line);border-radius:10px;padding:7px 10px;min-height:40px;width:100%;min-width:0}
+select{width:auto;max-width:46vw}
+.legend{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:12px;color:var(--muted);align-items:center}
+.legend i{display:inline-block;vertical-align:-2px;margin-right:4px}
+/* token cards */
+.list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px}
+.card{background:var(--sheet);border:1px solid var(--line);border-radius:16px;overflow:hidden}
+.head{all:unset;box-sizing:border-box;cursor:pointer;display:grid;grid-template-columns:auto 1fr auto;gap:4px 12px;align-items:center;width:100%;padding:14px}
+.head:focus-visible{outline:2px solid var(--seal);outline-offset:-2px;border-radius:16px}
+.grade{display:grid;place-items:center;width:38px;height:38px;border-radius:10px;color:#fff;font:600 20px var(--f-mono);grid-row:span 2}
+.sym{font:600 17px var(--f-mono);line-height:1.2}
+.sym small{font:400 12px var(--f-body);color:var(--muted);margin-left:6px}
+.sub{font-size:12px;color:var(--muted);line-height:1.3;display:flex;flex-wrap:wrap;gap:4px 8px;align-items:center;min-width:0}
+.pill{font-size:12px;font-weight:700;color:var(--seal);background:var(--seal-soft);border-radius:999px;padding:2px 9px;white-space:nowrap}
+.role{background:var(--paper);border-radius:12px;padding:10px 12px;font-size:14px;line-height:1.6}
+.role b{display:block;font-size:12px;color:var(--seal);margin-bottom:2px}
+.tot{grid-row:span 2;text-align:right;font:600 22px var(--f-mono);line-height:1}
+.tot small{display:block;font:400 10px var(--f-body);color:var(--muted);margin-top:4px}
+.cells{grid-column:1/-1;display:grid;grid-template-columns:6fr 4fr;gap:10px;margin-top:8px}
+.grp{display:flex;flex-direction:column;gap:3px;min-width:0}
+.grp .lab{display:flex;justify-content:space-between;font-size:11px;color:var(--muted)}
+.grp .lab b{font-family:var(--f-mono);color:var(--ink);font-weight:600}
+.sq{display:grid;gap:3px}
+.sq.n6{grid-template-columns:repeat(6,1fr)}.sq.n4{grid-template-columns:repeat(4,1fr)}
+.c{height:26px;border-radius:5px;display:grid;place-items:center;font:500 10px var(--f-mono);border:1px solid var(--s0line);background:var(--s0);color:var(--muted)}
+.c.v1{background:var(--s1);border-color:var(--s1);color:var(--ink)}
+.c.v2{background:var(--s2);border-color:var(--s2);color:var(--on-seal)}
+.c.na{border-style:dashed;background:none}
+.c.hl{outline:2px solid var(--ink);outline-offset:1px}
+.na-note{grid-column:1/-1;font-size:11px;color:var(--muted)}
+.body{border-top:1px solid var(--line);padding:14px;display:flex;flex-direction:column;gap:14px}
+.items{display:flex;flex-direction:column}
+.items h4{margin:6px 0 2px;font-size:12px;color:var(--muted);font-weight:500;display:flex;justify-content:space-between}
+.it{display:grid;grid-template-columns:auto 1fr auto;gap:2px 10px;padding:9px 0;border-bottom:1px solid var(--line);align-items:start}
+.it:last-child{border-bottom:0}
+.it .c{width:30px;height:30px;font-size:13px;font-weight:600}
+.it b{font-size:14px;line-height:1.4}
+.it .why{font-size:13px;color:var(--muted);line-height:1.5;grid-column:2}
 
+.src{font-size:13px;display:flex;flex-direction:column;gap:4px}
+.src a{word-break:break-word}
+/* scoring items */
+details.crit{background:var(--sheet);border:1px solid var(--line);border-radius:14px}
+details.crit summary{cursor:pointer;list-style:none;padding:12px 14px;display:flex;gap:10px;align-items:baseline}
+details.crit summary::-webkit-details-marker{display:none}
+details.crit summary::after{content:"＋";margin-left:auto;color:var(--muted)}
+details.crit[open] summary::after{content:"－"}
+.no{font:600 13px var(--f-mono);color:var(--seal)}
+.tag{font-size:11px;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:0 8px;white-space:nowrap}
+.lv{display:grid;grid-template-columns:auto 1fr;gap:6px 10px;padding:0 14px 8px;font-size:14px;align-items:center;margin:0}
+.lv dt .c{width:26px;height:26px;font-size:12px}
+.lv dd{margin:0}
+.eq{padding:0 14px 12px;font-size:13px;color:var(--muted)}
+.crit .sortby{all:unset;cursor:pointer;margin:0 14px 14px;font-size:13px;color:var(--seal);text-decoration:underline}
+/* stock market comparison */
+.cmp{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+.cmp li{background:var(--sheet);border:1px solid var(--line);border-radius:12px;padding:10px 14px;display:flex;flex-direction:column;gap:2px}
+.cmp .k{font-size:11px;color:var(--muted)}
+.cmp .to{font-weight:700;color:var(--seal)}
+ol.plan{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:8px;counter-reset:p}
+ol.plan li{counter-increment:p;background:var(--sheet);border:1px solid var(--line);border-radius:12px;padding:10px 14px 10px 48px;position:relative;display:flex;flex-direction:column}
+ol.plan li::before{content:counter(p);position:absolute;left:14px;top:10px;width:24px;height:24px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center;font:600 12px var(--f-mono)}
+ol.plan li.now{border-color:var(--seal)}
+ol.plan li.now::before{background:var(--seal);color:var(--on-seal);border-color:var(--seal)}
+ol.plan span{font-size:13px;color:var(--muted)}
+.now-tag{font-size:11px;color:var(--seal);font-weight:700}
+footer{font-size:13px;color:var(--muted);border-top:1px solid var(--line);padding-top:16px;display:flex;flex-direction:column;gap:8px}
+footer .links{display:flex;flex-wrap:wrap;gap:4px 14px}
+.empty{color:var(--muted);text-align:center;padding:20px}
+</style>
 <div class="wrap">
   <header class="hero">
-    <div>
-      <div class="eyebrow">TOKEN CHARTER · A LEDGER ANYONE CAN VERIFY</div>
-      <h1>Token Charter</h1>
-      <p class="lead">We score whether crypto projects <strong>keep their promises, and whether anything makes them keep them</strong>, with one yardstick, in public. In stock markets, exchanges and bond trustees play the role of enforcer. Token Charter fills that role with public data now, and with collateral and automatic penalties later.</p>
-      <div class="meta"><span>As of __ASOF__</span><span>__COUNT__ tokens</span><span>10 items × 0–2 points</span><a class="lang" href="../">日本語</a></div>
-    </div>
-    <div class="stamp" aria-hidden="true"><div>Promise<br>rating<small>0–2 × 10</small></div></div>
+    <div class="eyebrow">TOKEN CHARTER · A LEDGER ANYONE CAN VERIFY</div>
+    <h1>Token Charter</h1>
+    <p>A ledger scoring whether crypto projects <strong>keep their promises, and whether anything makes them keep them</strong>, on 10 items. <a href="#about">More</a></p>
+    <div class="meta"><span>As of __ASOF__</span><span>__COUNT__ tokens</span><span>10 items × 0–2 points</span><a class="lang" href="../">日本語</a></div>
   </header>
-
-  <section aria-labelledby="dist-h">
-    <h2 id="dist-h">Grade distribution</h2>
-    <div class="dist" id="dist"></div>
-    <p class="note" id="gap-note"></p>
-  </section>
 
   <section aria-labelledby="t-h">
     <h2 id="t-h">The ledger</h2>
-    <div class="controls" role="group" aria-label="Filter by category" id="filters"></div>
-    <div class="legend">
-      <span class="dots"><span class="dot v2"></span></span>2 points
-      <span class="dots"><span class="dot v1"></span></span>1 point
-      <span class="dots"><span class="dot"></span></span>0 points
-      <span class="dots"><span class="dot na"></span></span>Not applicable (no issuer)
-      <span>· Left 6 are issuer items, right 4 are mechanism items · Tap a row for the summary and sources</span>
+    <p class="ask small">Think a score is wrong? Anyone can send a fix. <span class="askb"><a class="mini main" id="ask-fix" href="#">✎ Correct</a><a class="mini" id="ask-add" href="#">＋ Request a rating</a><a href="#send">How it works</a></span></p>
+    <div class="tools">
+      <div class="dist" id="dist" role="group" aria-label="Filter by grade"></div>
+      <div class="chips" id="cats" role="group" aria-label="Filter by category"></div>
+      <div class="row2"><input id="q" type="search" placeholder="Search tokens or roles" aria-label="Search tokens or roles" autocomplete="off" autocapitalize="characters"><select id="sort" aria-label="Sort"></select></div>
     </div>
-    <div class="scroll">
-      <table>
-        <thead><tr>
-          <th><button data-k="g">Grade</button></th>
-          <th><button data-k="s">Token</button></th>
-          <th><button data-k="t">Score</button></th>
-          <th>Items 1–6 / 7–10</th>
-          <th><button data-k="a">Issuer</button></th>
-          <th><button data-k="m">Mechanism</button></th>
-          <th><button data-k="c">Category</button></th>
-          <th>Confidence</th>
-        </tr></thead>
-        <tbody id="tb"></tbody>
-      </table>
-    </div>
-    <p class="note">BTC, ETH, SOL and ZEC have no issuer, so they are scored on the 4 mechanism items only. Their scores are not directly comparable with tokens that have an issuer.</p>
+    <div class="legend"><span><i class="c v2" style="width:14px;height:14px"></i>2 points</span><span><i class="c v1" style="width:14px;height:14px"></i>1 point</span><span><i class="c" style="width:14px;height:14px"></i>0 points</span><span><i class="c na" style="width:14px;height:14px"></i>Not applicable</span><span>Numbers are item numbers. Tap a token for reasons and its role</span></div>
+    <ul class="list" id="list"></ul>
+    <p class="more small">Token not listed? <a class="mini" id="more-add" href="#">＋ Request a rating</a></p>
+    <p class="small muted">BTC, ETH, SOL and ZEC have no issuer, so they are scored on the 4 mechanism items only. Their scores are not directly comparable with tokens that have an issuer.</p>
+  </section>
+
+  <section aria-labelledby="dist-h">
+    <h2 id="dist-h">Grade distribution</h2>
+    <div class="dist" id="dist2" aria-hidden="true"></div>
+    <div class="distsyms" id="distsyms"></div>
+    <p class="gap" id="gap"></p>
+  </section>
+
+  <section aria-labelledby="about-h" id="about">
+    <h2 id="about-h">About the charter</h2>
+    <p>We score whether crypto projects <strong>keep their promises, and whether anything makes them keep them</strong>, with one yardstick, in public. In stock markets, exchanges and bond trustees play the role of enforcer. Token Charter fills that role with public data now, and with collateral and automatic penalties later.</p>
+  </section>
+
+  <section aria-labelledby="send-h" id="send">
+    <h2 id="send-h">Corrections and rating requests</h2>
+    <p>This ledger grows through everyone's corrections. Add one source URL; no name needed. What you send becomes a charter issue within a day, and people check the source and update the score if it holds up.</p>
+    <p class="small muted">Open a token in the ledger to find "Correct" on each item. For a token not listed, just send its CoinGecko page URL. The issue shows how many people asked.</p>
+    <div class="cta2"><a class="btn main" id="send-fix" href="#">✎ Correct</a><a class="btn sub" id="send-add" href="#">＋ Request a rating</a></div>
   </section>
 
   <section aria-labelledby="c-h">
     <h2 id="c-h">The 10 items</h2>
-    <div class="crit" id="crit"></div>
-    <p class="muted" style="font-size:13px">Grades: __GRADES__ (points divided by the maximum, on a 100-point scale).</p>
+    <p class="small muted">Grades: __GRADES__ (points divided by the maximum, on a 100-point scale).</p>
+    <div id="crit" style="display:flex;flex-direction:column;gap:8px"></div>
   </section>
 
   <section aria-labelledby="s-h">
     <h2 id="s-h">Who enforces promises in stock markets</h2>
-    <div class="prose"><p>Companies keep their promises because someone penalizes them when they don't. Crypto has no one in that role.</p></div>
-    <div class="scroll"><table class="cmp">
-      <thead><tr><th>Stock market mechanism</th><th>Enforcer</th><th>Token Charter equivalent</th></tr></thead>
-      <tbody>
-        <tr><td>IPO lock-ups (usually 180 days in the US)</td><td>Underwriter contracts</td><td>Insider selling rules</td></tr>
-        <tr><td>Pre-filed trading plans (US 10b5-1)</td><td>Securities regulator</td><td>Published selling plans</td></tr>
-        <tr><td>Dividend policy, buyback resolutions</td><td>Board, shareholder meeting</td><td>Holder-return commitments and delivery</td></tr>
-        <tr><td>Timely disclosure, quarterly reports</td><td>Exchange, regulator</td><td>Regular reporting</td></tr>
-        <tr><td>Bond covenants</td><td>Bond trustee, courts</td><td>Collateral and automatic penalties</td></tr>
-        <tr><td>Corporate governance codes</td><td>Exchange (comply or explain)</td><td>Accountability</td></tr>
-        <tr><td>Tokyo Stock Exchange list of companies disclosing capital-efficiency plans</td><td>Public list (no penalty)</td><td>Permissionless rating</td></tr>
-      </tbody>
-    </table></div>
+    <p>Companies keep their promises because someone penalizes them when they don't. Crypto has no one in that role.</p>
+    <ul class="cmp">
+      <li><span class="k">Stock market mechanism</span><b>IPO lock-ups (usually 180 days in the US)</b><span class="k">Enforcer: Underwriter contracts</span><span class="to">→ Insider selling rules</span></li>
+      <li><span class="k">Stock market mechanism</span><b>Pre-filed trading plans (US 10b5-1)</b><span class="k">Enforcer: Securities regulator</span><span class="to">→ Published selling plans</span></li>
+      <li><span class="k">Stock market mechanism</span><b>Dividend policy, buyback resolutions</b><span class="k">Enforcer: Board, shareholder meeting</span><span class="to">→ Holder-return commitments and delivery</span></li>
+      <li><span class="k">Stock market mechanism</span><b>Timely disclosure, quarterly reports</b><span class="k">Enforcer: Exchange, regulator</span><span class="to">→ Regular reporting</span></li>
+      <li><span class="k">Stock market mechanism</span><b>Bond covenants</b><span class="k">Enforcer: Bond trustee, courts</span><span class="to">→ Collateral and automatic penalties</span></li>
+      <li><span class="k">Stock market mechanism</span><b>Corporate governance codes</b><span class="k">Enforcer: Exchange (comply or explain)</span><span class="to">→ Accountability</span></li>
+      <li><span class="k">Stock market mechanism</span><b>Tokyo Stock Exchange list of companies disclosing capital-efficiency plans</b><span class="k">Enforcer: Public list (no penalty)</span><span class="to">→ Permissionless rating</span></li>
+    </ul>
   </section>
 
   <section aria-labelledby="p-h">
     <h2 id="p-h">Roadmap</h2>
     <ol class="plan">
       <li><b>Permissionless rating</b><span>Score from public data and publish. Not taking part becomes information in itself.</span></li>
-      <li class="now"><b>Sources and corrections</b><span>Every score links its sources. Anyone can correct it with a source and 2 approvals. We are here now.</span></li>
+      <li class="now"><b>Sources and corrections <span class="now-tag">We are here</span></b><span>Every score links its sources. Anyone can correct it with a source and 2 approvals. We are at this stage now.</span></li>
       <li><b>Registered promises</b><span>Projects register their return, selling and unlock commitments in a fixed format.</span></li>
       <li><b>Collateralized promises</b><span>Projects post collateral that goes to holders, by on-chain rules, if a promise is broken.</span></li>
     </ol>
-    <p class="note">Out of scope: hack prevention, market moves, and whether there is demand. Token Charter rates the reliability of promises only.</p>
+    <p class="small muted">Out of scope: hack prevention, market moves, and whether there is demand. Token Charter rates the reliability of promises only.</p>
   </section>
 
-  <footer>Scores are based on public information and change only through sourced proposals with 2 approvals. Not investment advice.<span id="repo-links"></span></footer>
+  <footer>
+    <p>Scores are based on public information and change only through sourced proposals with 2 approvals. Not investment advice.</p>
+    <div class="links" id="links"></div>
+  </footer>
 </div>
 
 <script>
 const T=__TOKENS__, I=__ITEMS__, REPO=__REPO__, BASE=__BASE__;
+const LQ="lang=en";   // language for the request window
+const rq=q=>BASE+"request/"+((LQ||q)?"?"+[LQ,q].filter(Boolean).join("&"):"");
+const W={all:"All",grade:g=>`Grade ${g}`,gradeN:(g,n)=>`Grade ${g} (${n} tokens)`,none:"No matching tokens",of:"/ 100",conf:"Confidence",noIssuer:"No issuer, so the left 6 items do not apply",
+  issuer:"Issuer",mech:"Mechanism",issuerH:"Issuer (items 1–6)",mechH:"Mechanism (items 7–10)",pts:v=>v+" pts",what:"What is this token for?",na:"Not applicable (no issuer)",fix:"✎ Correct",fixA:(s,n)=>`Correct item ${n} of ${s}`,fixAll:s=>`Send a correction for ${s}`,
+  src:"Sources",rev:"Reviewed ",met:(d,p)=>`Last 30 days (DefiLlama categories, fetched ${d}; reference only, not used in scores): ${p}`,rev1:"Revenue ",hold:"to holders ",sep:", ",
+  sorts:[["t","Highest score"],["a","Highest issuer score"],["m","Highest mechanism score"],["s","Token name"],["c","Category"]],sortI:(no,n)=>`Item ${no}: ${n}`,
+  eq:"Stock market analogue: ",sortby:"Sort the ledger by this item",
+  gap0:n=>`None of the ${n} tokens backs its promises with collateral (no token scores 2 on item 5). That is the gap Token Charter wants to fill.`,gapN:(k,n)=>`${k} of the ${n} tokens back their promises with collateral (2 points on item 5).`,
+  rules:"Editing rules",rulesF:"RULES.en.md",raw:"Raw data",req:"Request a rating or send a correction"};
+const GR="ABCDE", CATS=[W.all,...new Set(T.map(t=>t.c))];
+const $=s=>document.querySelector(s), esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const usd=v=>v==null?"—":"$"+(v>=1e6?(v/1e6).toFixed(1)+"M":v>=1e3?(v/1e3).toFixed(0)+"K":Math.round(v));
-function metLine(t){if(!t.met)return "";const p=[];if(t.met.revenue)p.push("Revenue "+usd(t.met.revenue));if(t.met.holders)p.push("to holders "+usd(t.met.holders));return p.length?`<p class="src">Last 30 days (DefiLlama categories, fetched ${esc(t.metAt||"")}; reference only, not used in scores): ${p.join(", ")}</p>`:""}
-const GR="ABCDE", CATS=["All","Baseline","Layer 1","DeFi","Infrastructure","Small"];
-let cat="All", key="t", dir=-1, open=null;
-const $=s=>document.querySelector(s);
-const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const hue=s=>[...s].reduce((h,c)=>(h*31+c.charCodeAt(0))%360,0);
+const icon=t=>`<span class="ic mono" style="background:hsl(${hue(t.s)} 40% 42%)" aria-hidden="true">${esc(t.s.slice(0,3))}${t.ic?`<img src="${BASE}icons/${encodeURIComponent(t.s)}.png" alt="" width="30" height="30" loading="lazy" onerror="this.remove()">`:""}</span>`;
+let cat=W.all, grade=null, sort="t", q="", open=new Set();
+["ask-fix","send-fix"].forEach(id=>$("#"+id).href=rq("t=fix"));["ask-add","send-add","more-add"].forEach(id=>$("#"+id).href=rq(""));
 
-$("#dist").innerHTML=GR.split("").map(g=>{const xs=T.filter(t=>t.g===g).sort((a,b)=>b.t-a.t);
-  return `<div><span><span class="grade g${g}">${g}</span></span><b>${xs.length}</b><span>tokens</span><span class="syms">${xs.map(x=>x.s).join(" ")}</span></div>`}).join("");
-
-$("#filters").innerHTML=CATS.map(c=>`<button class="chip" id="f-${c}" aria-pressed="${c===cat}" data-c="${c}">${c}</button>`).join("");
-$("#filters").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;cat=b.dataset.c;open=null;
-  document.querySelectorAll("#filters .chip").forEach(x=>x.setAttribute("aria-pressed",x.dataset.c===cat));render()});
-
-document.querySelectorAll("th button").forEach(b=>b.addEventListener("click",()=>{const k=b.dataset.k;
-  if(key===k)dir=-dir;else{key=k;dir=(k==="s"||k==="c"||k==="g")?1:-1}render()}));
-
-function dots(v){return v.map((x,i)=>(i===6?'<span class="sep"></span>':'')+`<span class="dot ${x===null?'na':'v'+x}" title="${esc(I[i].name)}：${x===null?'n/a':x+(x===1?' point':' points')}"></span>`).join("")}
-function bar(x){return x===null?'<span class="muted">—</span>':`${x}<span class="bar"><i style="width:${x}%"></i></span>`}
-function val(t,k){const v=t[k];return v===null?-1:v}
-function render(){
-  const xs=T.filter(t=>cat==="All"||t.c===cat).sort((a,b)=>{const x=val(a,key),y=val(b,key);
-    return (x>y?1:x<y?-1:0)*dir||(b.t-a.t)||a.s.localeCompare(b.s)});
-  document.querySelectorAll("th button").forEach(b=>{if(b.dataset.k===key)b.dataset.dir=dir>0?"▲":"▼";else delete b.dataset.dir});
-  $("#tb").innerHTML=xs.map(t=>{
-    let h=`<tr class="row" tabindex="0" data-s="${t.s}" aria-expanded="${open===t.s}">
-      <td><span class="grade g${t.g}">${t.g}</span></td>
-      <td class="sym"><span class="symw">${t.ic?`<img class="ci" src="${BASE}icons/${t.s}.png" alt="" width="22" height="22" loading="lazy" onerror="this.remove()">`:""}<span>${t.s}<small>${esc(t.n)}</small></span></span></td>
-      <td class="num"><b>${t.t}</b></td>
-      <td><span class="dots">${dots(t.v)}</span></td>
-      <td class="num">${bar(t.a)}</td><td class="num">${bar(t.m)}</td>
-      <td>${esc(t.c)}</td><td>${t.k}</td></tr>`;
-    if(open===t.s){h+=`<tr class="detail"><td colspan="8"><div class="detail-grid"><div class="why"><p>${esc(t.note)}</p><p class="src">Sources: ${t.src.map(([l,u])=>`<a href="${esc(u)}" target="_blank" rel="noopener">${esc(l)}</a>`).join(" · ")}</p>${metLine(t)}<p class="src">Reviewed ${esc(t.rev)} · <a href="${BASE}request/?lang=en&t=fix&coin=${encodeURIComponent(t.s)}">Send a correction for this token</a></p></div>
-      <ul>${t.v.map((x,i)=>`<li><span>${i+1}. ${esc(I[i].name)}</span><b>${x===null?'—':x}</b></li>`).join("")}</ul></div></td></tr>`}
-    return h}).join("");
+// Grade distribution: the top one filters, the bottom one is read-only
+function drawDist(){
+  $("#dist").innerHTML=GR.split("").map(g=>{const n=T.filter(t=>t.g===g).length;return n?`<button class="g${g}" style="flex:${n}" data-g="${g}" aria-pressed="${grade===g}" aria-label="${W.gradeN(g,n)}">${g} ${n}</button>`:""}).join("");
+  $("#dist2").innerHTML=GR.split("").map(g=>{const n=T.filter(t=>t.g===g).length;return n?`<span class="g${g}" style="flex:${n}">${g} ${n}</span>`:""}).join("");
+  $("#distsyms").innerHTML=GR.split("").map(g=>`<b>${g}</b><span>${T.filter(t=>t.g===g).sort((a,b)=>b.t-a.t).map(x=>esc(x.s)).join(" ")||"—"}</span>`).join("");
 }
-function toggle(s){open=open===s?null:s;render();const r=document.querySelector(`tr.row[data-s="${s}"]`);if(r)r.focus()}
-$("#tb").addEventListener("click",e=>{const r=e.target.closest("tr.row");if(r)toggle(r.dataset.s)});
-$("#tb").addEventListener("keydown",e=>{const r=e.target.closest("tr.row");if(r&&(e.key==="Enter"||e.key===" ")){e.preventDefault();toggle(r.dataset.s)}});
+$("#dist").onclick=e=>{const b=e.target.closest("button");if(!b)return;grade=grade===b.dataset.g?null:b.dataset.g;drawDist();render()};
+{const k=T.filter(x=>x.v[4]===2).length;$("#gap").textContent=k===0?W.gap0(T.length):W.gapN(k,T.length)}
 
-$("#crit").innerHTML=I.map(i=>`<article><header><h3>${esc(i.name)}</h3><span><span class="no">${String(i.no).padStart(2,"0")}</span> <span class="tag">${i.grp}</span></span></header>
-  <dl><dt>2</dt><dd>${esc(i.h)}</dd><dt>1</dt><dd>${esc(i.m)}</dd><dt>0</dt><dd>${esc(i.l)}</dd></dl>
-  <div class="eq">Stock market analogue: ${esc(i.eq)}</div></article>`).join("");
-{const n=T.filter(x=>x.v[4]===2).length;document.getElementById("gap-note").textContent=n===0?`None of the ${T.length} tokens backs its promises with collateral (no token scores 2 on item 5). That is the gap Token Charter wants to fill.`:`${n} of the ${T.length} tokens back their promises with collateral (2 points on item 5).`}
-render();
-if(REPO){document.getElementById("repo-links").innerHTML=` <a href="${REPO}/blob/main/RULES.en.md" target="_blank" rel="noopener">Editing rules</a> · <a href="${REPO}" target="_blank" rel="noopener">GitHub</a> · <a href="${BASE}data/tokens.json" target="_blank" rel="noopener">Raw data</a> · <a href="${BASE}request/?lang=en">Request a rating or send a correction</a>`}
+$("#cats").innerHTML=CATS.map(c=>`<button class="chip" data-c="${esc(c)}" aria-pressed="${c===cat}">${esc(c)}</button>`).join("");
+$("#cats").onclick=e=>{const b=e.target.closest("button");if(!b)return;cat=b.dataset.c;document.querySelectorAll("#cats .chip").forEach(x=>x.setAttribute("aria-pressed",x.dataset.c===cat));render()};
+$("#sort").innerHTML=W.sorts.concat(I.map((x,i)=>["i"+i,W.sortI(x.no,x.name)])).map(([k,l])=>`<option value="${k}">${esc(l)}</option>`).join("");
+$("#sort").onchange=()=>{sort=$("#sort").value;render()};
+$("#q").oninput=()=>{q=$("#q").value.trim().toUpperCase();render()};
+
+const cell=(x,no,cls="")=>`<span class="c ${x===null?"na":"v"+x} ${cls}" aria-hidden="true">${no}</span>`;
+const fix=(t,no)=>rq(`t=fix&coin=${encodeURIComponent(t.s)}${no?"&item="+no:""}`);
+function sv(t){if(sort==="s")return t.s;if(sort==="c")return CATS.indexOf(t.c);if(sort[0]==="i"){const v=t.v[+sort.slice(1)];return v===null?-1:v}const v=t[sort];return v===null?-1:v}
+function render(){
+  const hi=sort[0]==="i"?+sort.slice(1):-1;
+  const xs=T.filter(t=>(cat===W.all||t.c===cat)&&(!grade||t.g===grade)&&(!q||[t.s,t.n,t.rt,t.r].join(" ").toUpperCase().includes(q)))
+    .sort((a,b)=>{const x=sv(a),y=sv(b);const d=sort==="s"||sort==="c"?(x>y?1:x<y?-1:0):(y>x?1:y<x?-1:0);return d||(b.t-a.t)||a.s.localeCompare(b.s)});
+  $("#list").innerHTML=xs.length?xs.map(t=>{
+    const o=open.has(t.s);
+    const grpH=(lab,from,to,sc)=>`<div class="grp"><span class="lab">${lab}<b>${sc===null?"—":sc}</b></span><span class="sq n${to-from}">${t.v.slice(from,to).map((x,k)=>cell(x,from+k+1,from+k===hi?"hl":"")).join("")}</span></div>`;
+    let h=`<li class="card"><button class="head" aria-expanded="${o}" data-s="${esc(t.s)}">
+      <span class="grade g${t.g}" aria-label="${W.grade(t.g)}">${t.g}</span>
+      <span class="sym">${icon(t)}${esc(t.s)}<small>${esc(t.n)}</small></span>
+      <span class="tot">${t.t}<small>${W.of}</small></span>
+      <span class="sub">${t.rt?`<span class="pill">${esc(t.rt)}</span>`:""}<span class="cat">${esc(t.c)} · ${W.conf} ${esc(t.k)}</span></span>
+      <span class="cells">${grpH(W.issuer,0,6,t.a)}${grpH(W.mech,6,10,t.m)}</span>
+      ${t.i?"":`<span class="na-note">${W.noIssuer}</span>`}
+    </button>`;
+    if(o){
+      const it=(x,i)=>{const d=I[i];const why=x===null?W.na:x===2?d.h:x===1?d.m:d.l;
+        return `<div class="it">${cell(x,x===null?"—":x)}<span><b>${d.no}. ${esc(d.name)}</b><br><span class="why">${esc(why)}</span></span>${x===null?"<span></span>":`<a class="fixb" href="${fix(t,d.no)}" aria-label="${esc(W.fixA(t.s,d.no))}">${W.fix}</a>`}</div>`};
+      const met=t.met&&(t.met.revenue||t.met.holders)?`<p class="small muted">${esc(W.met(t.metAt||"",[t.met.revenue?W.rev1+usd(t.met.revenue):"",t.met.holders?W.hold+usd(t.met.holders):""].filter(Boolean).join(W.sep)))}</p>`:"";
+      h+=`<div class="body">
+        ${t.r?`<p class="role"><b>${W.what}</b>${esc(t.r)}</p>`:""}
+        <p>${esc(t.note)}</p>
+        <div class="items"><h4><span>${W.issuerH}</span><span>${t.a===null?"—":W.pts(t.a)}</span></h4>${t.v.slice(0,6).map((x,i)=>it(x,i)).join("")}
+          <h4><span>${W.mechH}</span><span>${t.m===null?"—":W.pts(t.m)}</span></h4>${t.v.slice(6).map((x,i)=>it(x,i+6)).join("")}</div>
+        <div class="src"><b class="small">${W.src}</b>${t.src.map(([l,u])=>`<a href="${esc(u)}" target="_blank" rel="noopener">${esc(l)}</a>`).join("")}</div>
+        ${met}
+        <p class="small muted">${W.rev}${esc(t.rev)}</p>
+        <a class="btn main" href="${fix(t)}">${esc(W.fixAll(t.s))}</a>
+      </div>`}
+    return h+"</li>"}).join(""):`<li class="empty">${W.none}</li>`;
+}
+$("#list").onclick=e=>{const b=e.target.closest("button.head");if(!b)return;const s=b.dataset.s;open.has(s)?open.delete(s):open.add(s);render();const n=[...document.querySelectorAll("button.head")].find(x=>x.dataset.s===s);if(n)n.focus({preventScroll:true})};
+
+$("#crit").innerHTML=I.map((i,k)=>`<details class="crit"><summary><span class="no">${String(i.no).padStart(2,"0")}</span><b>${esc(i.name)}</b><span class="tag">${esc(i.grp)}</span></summary>
+  <dl class="lv"><dt>${cell(2,2)}</dt><dd>${esc(i.h)}</dd><dt>${cell(1,1)}</dt><dd>${esc(i.m)}</dd><dt>${cell(0,0)}</dt><dd>${esc(i.l)}</dd></dl>
+  <p class="eq">${W.eq}${esc(i.eq)}</p><button class="sortby" data-k="i${k}">${W.sortby}</button></details>`).join("");
+$("#crit").onclick=e=>{const b=e.target.closest(".sortby");if(!b)return;sort=b.dataset.k;$("#sort").value=sort;render();$("#t-h").scrollIntoView({behavior:"smooth"})};
+$("#links").innerHTML=(REPO?`<a href="${REPO}/blob/main/${W.rulesF}" target="_blank" rel="noopener">${W.rules}</a><a href="${REPO}" target="_blank" rel="noopener">GitHub</a>`:"")+`<a href="${BASE}data/tokens.json" target="_blank" rel="noopener">${W.raw}</a><a href="${rq("")}">${W.req}</a>`;
+drawDist();render();
 </script>
