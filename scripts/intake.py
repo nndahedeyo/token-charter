@@ -19,7 +19,7 @@ import time
 from common import load
 
 KIND, TAG, POW = 7730, "token-charter", 14
-RELAYS = ["wss://relay.damus.io", "wss://nos.lol", "wss://relay.primal.net", "wss://relay.nostr.band", "wss://offchain.pub", "wss://nostr.mom", "wss://relay.snort.social", "wss://nostr.wine"]
+RELAYS = ["wss://relay.damus.io", "wss://nos.lol", "wss://relay.primal.net", "wss://offchain.pub", "wss://nostr.mom"]  # 送る側（site/request.html）と同じ。1か所が止まっても、ほかで届く
 DAYS = 30           # 30日以内に届いたものを見る
 MAX_NEW = 5         # 1回に新しく作る課題の上限
 LABEL = "from-nostr"

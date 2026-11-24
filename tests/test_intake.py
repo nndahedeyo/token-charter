@@ -89,5 +89,11 @@ ex[t0]["state"] = "CLOSED"
 check("閉じた課題は作り直さず、書き直しもしない", I.plan([add("pepe", n=1), add("pepe", n=2)], DATA, NOW, ex) == ([], []))
 check("中身が壊れたものは捨てる", I.plan([make("not an object"), make({"t": "zzz"})], DATA, NOW, {}) == ([], []))
 
+# 送る側と受け取る側で、中継と出典の条件がそろっていること
+import pathlib, re as _re
+_page = (pathlib.Path(__file__).resolve().parent.parent / "site" / "request.html").read_text(encoding="utf-8")
+check("送る画面と同じ中継を読む", _re.findall(r'"(wss://[^"]+)"', _re.search(r"const RELAYS = \[[^\]]*\]", _page).group(0)) == I.RELAYS)
+check("送る画面も同じ出典の条件で確かめる", "[^\\s<>\"']{4,300}" in _page)
+
 print(f"{ok} OK, {fail} NG")
 sys.exit(1 if fail else 0)

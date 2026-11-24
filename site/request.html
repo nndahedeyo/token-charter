@@ -54,7 +54,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
       <label for="tok"><span id="l-tok">銘柄</span><select id="tok"></select></label>
       <label for="item" style="margin-top:14px"><span id="l-item">項目</span><select id="item"></select></label>
       <label for="what" style="margin-top:14px"><span id="l-what">何が違うか</span><small id="s-what">いまの内容と、正しいと考える内容</small><textarea id="what" maxlength="600"></textarea></label>
-      <label for="src" style="margin-top:14px"><span id="l-src">出典の URL</span><small id="s-src">出典がない訂正は受け付けません</small><input id="src" type="url" maxlength="300" placeholder="https://" autocomplete="off" autocapitalize="off" spellcheck="false"></label>
+      <label for="src" style="margin-top:14px"><span id="l-src">出典の URL</span><small id="s-src">出典がない訂正は受け付けません</small><input id="src" type="url" maxlength="2000" placeholder="https://" autocomplete="off" autocapitalize="off" spellcheck="false"></label>
       <div class="radios" role="radiogroup" aria-labelledby="l-int" style="margin-top:14px"><b id="l-int" style="font-size:14px">利害の開示</b>
         <label for="int-no"><input type="radio" name="int" id="int-no" value="none" checked><span id="t-int-no">この銘柄と利害関係はない</span></label>
         <label for="int-yes"><input type="radio" name="int" id="int-yes" value="insider"><span id="t-int-yes">関係者または大口保有者である</span></label>
@@ -71,7 +71,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 const qs = new URLSearchParams(location.search);
 const L = qs.get("lang") === "en" ? "en" : qs.get("lang") === "ja" ? "ja" : /^ja\b/i.test(navigator.language || "ja") ? "ja" : "en";
 const KIND = 7730, TAG = "token-charter", POW = 14;
-const RELAYS = ["wss://relay.damus.io", "wss://nos.lol", "wss://relay.primal.net", "wss://relay.nostr.band"];
+const RELAYS = ["wss://relay.damus.io", "wss://nos.lol", "wss://relay.primal.net", "wss://offchain.pub", "wss://nostr.mom"];
 const EN = {
   h: "Send to Token Charter", back: "← Token Charter", tab_add: "Request a rating", tab_fix: "Send a correction",
   lead: "Anyone can send. What you send is published on Nostr and turned into charter issues once a day. Scores only change through sourced proposals and approvals.",
@@ -79,7 +79,7 @@ const EN = {
   l_tok: "Token", l_item: "Item", l_what: "What is wrong", s_what: "The current content and what you think is correct", l_src: "Source URL", s_src: "Corrections without a source are not accepted",
   l_int: "Disclosure", int_no: "No interest in this token", int_yes: "I'm on the team or a large holder", send: "Send",
   foot: "Each message is signed with a throwaway key. Your name and device details are not included. To prevent spam, your device does a few seconds of work before sending.",
-  summary: "Summary text", needCoin: "Enter a CoinGecko URL or coin id.", needWhat: "Write what is wrong.", needSrc: "Enter a source URL starting with https://.",
+  summary: "Summary text", noData: "Couldn't load the charter data. Reopen this page and try again.", badSrc: "The source URL can't contain spaces or ' \" < >, and must be 300 characters or fewer.", needCoin: "Enter a CoinGecko URL or coin id.", needWhat: "Write what is wrong.", needSrc: "Enter a source URL starting with https://.",
   rated: "This coin is already in the charter. Use “Send a correction” instead.", working: "Preparing…", sending: "Sending…",
   ok: n => `Sent to ${n} relay${n > 1 ? "s" : ""}. It will appear as a charter issue within a day.`, fail: "Couldn't reach any relay. Check your connection and try again.", see: "See the issues",
 };
@@ -92,8 +92,10 @@ if (L === "en") {
   document.getElementById("back").href = "../en/";
 }
 const $ = id => document.getElementById(id);
-let mode = qs.get("t") === "fix" ? "fix" : "add", tokens = [], items = [];
-function setMode(m) { mode = m; $("add").hidden = m !== "add"; $("fix").hidden = m !== "fix"; document.querySelectorAll("[data-t]").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.t === m))); $("msg").textContent = ""; }
+let mode = qs.get("t") === "fix" ? "fix" : "add", tokens = [], items = [], ready = false;
+$("send").disabled = true;   // 憲章のデータを読み込むまで送れない（受け取る側が捨てるものを送らないように）
+const SRC_OK = /^https:\/\/[^\s<>"']{4,300}$/;   // 受け取る側（scripts/intake.py）と同じ条件
+function setMode(m) { mode = m; $("add").hidden = m !== "add"; $("fix").hidden = m !== "fix"; document.querySelectorAll("[data-t]").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.t === m))); if (ready) $("msg").textContent = ""; }
 document.querySelectorAll("[data-t]").forEach(b => b.onclick = () => setMode(b.dataset.t));
 // CoinGecko の URL か名前から、銘柄の名前（id）を取り出す
 const coinId = v => { v = String(v || "").trim(); const m = v.match(/coingecko\.com\/(?:[a-z-]+\/)?(?:coins|%E3%82%B3%E3%82%A4%E3%83%B3|コイン)\/([a-z0-9-]+)/i); const id = (m ? m[1] : v).toLowerCase(); return /^[a-z0-9-]{1,64}$/.test(id) ? id : ""; };
@@ -104,7 +106,8 @@ Promise.all(["../data/tokens.json", "../data/criteria.json"].map(u => fetch(u).t
   $("item").innerHTML = items.map(i => `<option value="${i.no}">${i.no}. ${L === "en" ? i.name_en : i.name}</option>`).join("") + `<option value="summary">${tr("summary", "要約の文章")}</option>`;
   const want = (qs.get("coin") || "").toUpperCase(), hit = tokens.find(t => t.symbol === want || t.coingecko === qs.get("coin"));
   if (hit) $("tok").value = hit.symbol;
-}).catch(() => {});
+  ready = true; $("send").disabled = false;
+}).catch(() => { msg(tr("noData", "憲章のデータを読み込めませんでした。ページを開き直してください。"), true); });
 setMode(mode);
 const msg = (t, err) => { $("msg").textContent = t; $("msg").className = err ? "err" : ""; };
 // 荒らしを防ぐ小さな計算（NIP-13）：イベントの番号の先頭が0のビットで POW 個そろうまで、nonce を変えて計算する
@@ -121,6 +124,7 @@ function publish(ev) {
 }
 $("f").onsubmit = async e => {
   e.preventDefault();
+  if (!ready) return msg(tr("noData", "憲章のデータを読み込めませんでした。ページを開き直してください。"), true);
   let c;
   if (mode === "add") {
     const id = coinId($("coin").value); if (!id) return msg(tr("needCoin", "CoinGecko の URL か、銘柄の名前を入れてください。"), true);
@@ -129,8 +133,10 @@ $("f").onsubmit = async e => {
   } else {
     const what = $("what").value.trim(), src = $("src").value.trim();
     if (!what) return msg(tr("needWhat", "何が違うかを書いてください。"), true);
-    if (!/^https:\/\/[^\s]+$/.test(src)) return msg(tr("needSrc", "https:// で始まる出典の URL を入れてください。"), true);
-    c = {t: "fix", token: $("tok").value, item: $("item").value, what: what.slice(0, 600), source: src.slice(0, 300), interest: document.querySelector("input[name=int]:checked").value};
+    if (!/^https:\/\//.test(src)) return msg(tr("needSrc", "https:// で始まる出典の URL を入れてください。"), true);
+    if (!SRC_OK.test(src)) return msg(tr("badSrc", "出典の URL に、空白や ' \" < > は使えません。長さは300文字までです。"), true);
+    if (!tokens.some(t => t.symbol === $("tok").value) || !/^([1-9]|10|summary)$/.test($("item").value)) return msg(tr("noData", "憲章のデータを読み込めませんでした。ページを開き直してください。"), true);
+    c = {t: "fix", token: $("tok").value, item: $("item").value, what: what.slice(0, 600), source: src, interest: document.querySelector("input[name=int]:checked").value};
   }
   $("send").disabled = true; msg(tr("working", "準備しています…"));
   try {
