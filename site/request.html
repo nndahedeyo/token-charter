@@ -106,6 +106,7 @@ Promise.all(["../data/tokens.json", "../data/criteria.json"].map(u => fetch(u).t
   $("item").innerHTML = items.map(i => `<option value="${i.no}">${i.no}. ${L === "en" ? i.name_en : i.name}</option>`).join("") + `<option value="summary">${tr("summary", "要約の文章")}</option>`;
   const want = (qs.get("coin") || "").toUpperCase(), hit = tokens.find(t => t.symbol === want || t.coingecko === qs.get("coin"));
   if (hit) $("tok").value = hit.symbol;
+  const wantItem = qs.get("item"); if (wantItem && [...$("item").options].some(o => o.value === wantItem)) $("item").value = wantItem;   // 項目の「違う？」から開いたとき
   ready = true; $("send").disabled = false;
 }).catch(() => { msg(tr("noData", "憲章のデータを読み込めませんでした。ページを開き直してください。"), true); });
 setMode(mode);
