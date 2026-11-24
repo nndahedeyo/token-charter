@@ -293,4 +293,14 @@ $("#crit").innerHTML=I.map((i,k)=>`<details class="crit"><summary><span class="n
 $("#crit").onclick=e=>{const b=e.target.closest(".sortby");if(!b)return;sort=b.dataset.k;$("#sort").value=sort;render();$("#t-h").scrollIntoView({behavior:"smooth"})};
 $("#links").innerHTML=(REPO?`<a href="${REPO}/blob/main/${W.rulesF}" target="_blank" rel="noopener">${W.rules}</a><a href="${REPO}" target="_blank" rel="noopener">GitHub</a>`:"")+`<a href="${BASE}data/tokens.json" target="_blank" rel="noopener">${W.raw}</a><a href="${rq("")}">${W.req}</a>`;
 drawDist();render();
+// #HYPE のような印で開かれたら、その銘柄を開いて、そこまで画面を動かす（残高帳などからのリンク用）。知らない印は何もしない
+function openFromHash(){
+  let h="";try{h=decodeURIComponent(location.hash.slice(1)).toUpperCase()}catch(e){return}
+  const hit=T.find(t=>t.s===h);if(!hit)return;
+  cat=W.all;grade=null;q="";$("#q").value="";document.querySelectorAll("#cats .chip").forEach(x=>x.setAttribute("aria-pressed",x.dataset.c===cat));drawDist();
+  open.add(hit.s);render();
+  const n=[...document.querySelectorAll("button.head")].find(x=>x.dataset.s===hit.s);
+  if(n)requestAnimationFrame(()=>{n.closest(".card").scrollIntoView({block:"start"});n.focus({preventScroll:true})});
+}
+openFromHash();addEventListener("hashchange",openFromHash);
 </script>

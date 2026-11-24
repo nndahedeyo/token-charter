@@ -90,6 +90,7 @@ PAIRS = [
     ('gap0:n=>`担保つきの約束をしている銘柄は、${n}銘柄のうち一つもありません（項目5で2点の銘柄はゼロ）。ここがトークン憲章の埋めたい空白です。`,gapN:(k,n)=>`担保つきの約束をしている銘柄は、${n}銘柄のうち${k}銘柄です（項目5で2点）。`,',
      'gap0:n=>`None of the ${n} tokens backs its promises with collateral (no token scores 2 on item 5). That is the gap Token Charter wants to fill.`,gapN:(k,n)=>`${k} of the ${n} tokens back their promises with collateral (2 points on item 5).`,'),
     ('rules:"編集ルール",rulesF:"RULES.md",raw:"生データ",req:"評価を頼む・訂正を送る"};', 'rules:"Editing rules",rulesF:"RULES.en.md",raw:"Raw data",req:"Request a rating or send a correction"};'),
+    ('// #HYPE のような印で開かれたら、その銘柄を開いて、そこまで画面を動かす（残高帳などからのリンク用）。知らない印は何もしない', '// Opened with a mark like #HYPE: open that token and scroll to it (for links from Zandaka etc.). Unknown marks do nothing'),
     ('// ランクの分布：上は絞り込み、下は読むだけ', '// Grade distribution: the top one filters, the bottom one is read-only'),
 ]
 
