@@ -72,6 +72,8 @@ Changes to these rules, the approver list (`APPROVERS.md`), the criteria (`data/
 - **Once a day it becomes an issue automatically** (label `from-nostr`). Rating requests are grouped per coin with the number of senders ("n requests"); since throwaway keys are counted, the number is approximate. Corrections without a source URL are not accepted
 - **Scores do not change.** These issues are prompts for people to check sources and open a proposal. Only sourced proposals with approvals change scores, as before
 - **To prevent spam**, your device does a few seconds of work before sending, and at most 5 new issues are opened per day. Issues matching a closed one are not reopened. Received text is treated as data and never executed
+- **Corrections use the daily slots first.** Rating requests for ids not found on CoinGecko are kept, flagged and placed last
+- **When a requested coin is added to the charter**, its request issue gets a note and is closed automatically. Only fulfilled requests are closed
 
 ## Limits of this system
 

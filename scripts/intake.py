@@ -6,6 +6,8 @@
 - 評価の希望：銘柄ごとに1つの課題にまとめ、送った人（使い捨てのかぎ）の数を「希望 n件」として書き直す
 - 訂正：出典の URL がないものは捨てる。同じ銘柄・項目・出典は1つにまとめる
 - 1回に新しく作る課題は MAX_NEW 件まで。閉じた課題と同じ題名は、新しく作らない（判断を尊重する）
+- 枠は訂正から先に使う。評価の希望は、CoinGecko にない名前に印を付けて後ろに回す（捨てはしない）
+- 評価の希望の銘柄が憲章に入ったら、その課題に書き添えて閉じる（願いがかなったものだけを閉じる）
 """
 import asyncio
 import hashlib
@@ -160,11 +162,14 @@ def group(entries):
     return adds, fixes
 
 
-def add_issue(coin, g):
+def add_issue(coin, g, missing=False):
     title = f"[追加の希望] {coin}"
+    warn = ("> ⚠ CoinGecko にこの名前が見つかりません。打ち間違いか、まだ載っていない銘柄かもしれません。\n"
+            "> ⚠ This id was not found on CoinGecko. It may be a typo or a coin not listed yet.\n\n") if missing else ""
     reasons = "\n".join(f"> {w}" for w in g["why"][:10]) or "> （理由の記入なし / no reason given）"
     body = (f"窓口（Nostr）に届いた、トークン憲章への追加の希望です。\n"
             f"A request to add this coin, received through the request window (Nostr).\n\n"
+            f"{warn}"
             f"- CoinGecko: https://www.coingecko.com/en/coins/{coin}\n"
             f"- 希望 / Requests: **{len(g['who'])}件**（送った人の数。使い捨てのかぎで数えるので目安 / counted by throwaway keys, so approximate）\n\n"
             f"届いた理由 / Reasons received:\n\n{reasons}\n\n"
@@ -221,18 +226,20 @@ def gh(*args, input_text=None):
     return subprocess.run(["gh", *args], input=input_text, capture_output=True, text=True, check=True).stdout
 
 
-def plan(events, data, now, existing):
+def plan(events, data, now, existing, known=None):
     """作る・書き直す課題の一覧を返す（GitHub には触れない。試験できるように分けてある）。
-    existing: 題名 → {"number", "state", "body"}"""
+    existing: 題名 → {"number", "state", "body"}
+    known: CoinGecko にある名前の集まり。調べられなかったときは None（印を付けない）"""
     symbols = {t["symbol"] for t in data["tokens"]}
     coins = {t.get("coingecko") for t in data["tokens"] if t.get("coingecko")}
     entries = [e for e in (parse(ev, symbols, coins) for ev in events if valid(ev, now)) if e]
     adds, fixes = group(entries)
     todo = []
-    for coin, g in sorted(adds.items(), key=lambda x: -len(x[1]["who"])):
-        todo.append(add_issue(coin, g))
-    for key, e in sorted(fixes.items(), key=lambda x: x[1]["at"]):
+    for key, e in sorted(fixes.items(), key=lambda x: x[1]["at"]):   # 訂正が先
         todo.append(fix_issue(key, e))
+    missing = lambda c: known is not None and c not in known
+    for coin, g in sorted(adds.items(), key=lambda x: (missing(x[0]), -len(x[1]["who"]), x[0])):   # 見つからない名前は後ろ
+        todo.append(add_issue(coin, g, missing(coin)))
     new, edit = [], []
     for title, body in todo:
         ex = existing.get(title)
@@ -244,6 +251,32 @@ def plan(events, data, now, existing):
     return new, edit
 
 
+ADD_MARK = re.compile(r"<!-- intake:add:([a-z0-9-]{1,64}) -->")
+
+
+def closable(existing, data):
+    """開いている評価の希望のうち、銘柄が憲章に入ったもの：[(番号, 記号)]"""
+    by_coin = {t.get("coingecko"): t["symbol"] for t in data["tokens"] if t.get("coingecko")}
+    out = []
+    for ex in existing.values():
+        m = ADD_MARK.search(ex.get("body") or "")
+        if ex.get("state") == "OPEN" and m and m.group(1) in by_coin:
+            out.append((ex["number"], by_coin[m.group(1)]))
+    return sorted(out)
+
+
+def fetch_known():
+    """CoinGecko にある名前の一覧。取れなければ None（そのときは印を付けない）"""
+    import urllib.request
+    try:
+        with urllib.request.urlopen(urllib.request.Request("https://api.coingecko.com/api/v3/coins/list", headers={"User-Agent": "token-charter-intake"}), timeout=30) as r:
+            ids = {c["id"] for c in json.load(r) if isinstance(c, dict) and isinstance(c.get("id"), str)}
+        return ids if len(ids) > 1000 else None
+    except Exception as x:
+        print(f"coingecko: {type(x).__name__}", file=sys.stderr)
+        return None
+
+
 def main():
     now = int(time.time())
     data = load("tokens.json")
@@ -252,13 +285,18 @@ def main():
     subprocess.run(["gh", "label", "create", LABEL, "--color", "5B6676", "--description", "評価の希望と訂正の窓口（Nostr）から届いたもの"], capture_output=True)
     raw = json.loads(gh("issue", "list", "--label", LABEL, "--state", "all", "--limit", "500", "--json", "number,title,state,body"))
     existing = {i["title"]: i for i in raw}
-    new, edit = plan(events, data, now, existing)
+    known = fetch_known()
+    print(f"coingecko ids: {len(known) if known else 'unavailable'}")
+    new, edit = plan(events, data, now, existing, known)
     for title, body in new:
         gh("issue", "create", "--title", title, "--label", LABEL, "--body-file", "-", input_text=body)
         print(f"created: {title}")
     for number, body in edit:
         gh("issue", "edit", str(number), "--body-file", "-", input_text=body)
         print(f"updated: #{number}")
+    for number, sym in closable(existing, data):
+        gh("issue", "close", str(number), "--comment", f"この銘柄はトークン憲章で評価されました（{sym}）。ありがとうございました。\nThis coin is now rated in the Token Charter ({sym}). Thank you.")
+        print(f"closed: #{number} ({sym})")
 
 
 if __name__ == "__main__":

@@ -89,6 +89,24 @@ ex[t0]["state"] = "CLOSED"
 check("閉じた課題は作り直さず、書き直しもしない", I.plan([add("pepe", n=1), add("pepe", n=2)], DATA, NOW, ex) == ([], []))
 check("中身が壊れたものは捨てる", I.plan([make("not an object"), make({"t": "zzz"})], DATA, NOW, {}) == ([], []))
 
+# 訂正を先に、CoinGecko にない名前は印を付けて後ろへ
+KNOWN = {"pepe", "dogwifcoin", "bitcoin"}
+evs = [add("zzz-typo", n=1), add("zzz-typo", n=2), add("pepe", n=3)] + [fix(src=f"https://example.com/{i}", n=10 + i) for i in range(4)]
+new, _ = I.plan(evs, DATA, NOW, {}, KNOWN)
+check("枠は訂正から先に使う", [t.startswith("[訂正]") for t, _ in new] == [True] * 4 + [False])
+check("CoinGecko にある名前が、人数の多い見つからない名前より先", new[4][0] == "[追加の希望] pepe")
+new, _ = I.plan([add("zzz-typo"), add("pepe", n=2)], DATA, NOW, {}, KNOWN)
+check("見つからない名前も捨てずに課題にし、印を付ける", [t for t, _ in new] == ["[追加の希望] pepe", "[追加の希望] zzz-typo"] and "見つかりません" in new[1][1] and "見つかりません" not in new[0][1])
+new, _ = I.plan([add("zzz-typo")], DATA, NOW, {}, None)
+check("CoinGecko を調べられなかったときは印を付けない", len(new) == 1 and "見つかりません" not in new[0][1])
+# 評価済みになった希望を閉じる
+ex = {"[追加の希望] hyperliquid": {"number": 7, "state": "OPEN", "body": "x <!-- intake:add:hyperliquid -->"},
+      "[追加の希望] pepe": {"number": 8, "state": "OPEN", "body": "x <!-- intake:add:pepe -->"},
+      "[追加の希望] bitcoin": {"number": 9, "state": "CLOSED", "body": "x <!-- intake:add:bitcoin -->"},
+      "[訂正] BTC 項目8 (aa)": {"number": 10, "state": "OPEN", "body": "<!-- intake:fix:BTC:8:aa -->"}}
+check("憲章に入った銘柄の希望だけを閉じる", I.closable(ex, DATA) == [(7, "HYPE")])
+check("目印のない課題や、書き換えられた本文は閉じない", I.closable({"t": {"number": 1, "state": "OPEN", "body": "hyperliquid"}}, DATA) == [])
+
 # 送る側と受け取る側で、中継と出典の条件がそろっていること
 import pathlib, re as _re
 _page = (pathlib.Path(__file__).resolve().parent.parent / "site" / "request.html").read_text(encoding="utf-8")
